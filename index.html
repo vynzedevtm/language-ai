@@ -309,16 +309,16 @@
     }
 
     .correction-box {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       padding: 8px 12px;
       background: rgba(234, 179, 8, 0.08);
       border: 1px solid rgba(234, 179, 8, 0.25);
       border-radius: 10px;
       font-size: 0.85rem;
       color: #fef08a;
+      line-height: 1.4;
     }
 
-    /* MINIMAL WHITE-OUTLINE SPEAK PILL */
     .speak-btn {
       margin-top: 10px;
       align-self: flex-start;
@@ -623,7 +623,7 @@
     // -------------------------------------------------------------
     // CONFIGURATION & PERSISTENCE
     // -------------------------------------------------------------
-    const WORKER_URL = "https://language-tutor-api.ashishkaji08.workers.dev";
+    const WORKER_URL = "https://language-tutor-api.ashishkaji08.workers.dev/";
     const VOICE_LIMIT = 5;
 
     // Daily Midnight Auto-Reset Routine
@@ -701,7 +701,8 @@
 
       window.speechSynthesis.cancel();
 
-      const cleanText = text.replace(/Correction:.*?\n/gi, '').trim() || text;
+      // Clean out any lingering "Correction:" label from speech audio
+      const cleanText = text.replace(/Correction:\s*([^\n]+)/gi, '$1').trim() || text;
       const utterance = new SpeechSynthesisUtterance(cleanText);
       const targetLang = document.getElementById("targetLang").value;
       const targetPrefix = LANG_VOICE_MAP[targetLang] || 'en';
@@ -710,7 +711,6 @@
         availableVoices = window.speechSynthesis.getVoices();
       }
 
-      // Prioritize regional accents (e.g. en-IN for Manglish/Hinglish)
       const matchedVoice = availableVoices.find(v => v.lang.toLowerCase().startsWith(targetPrefix.toLowerCase())) ||
                            availableVoices.find(v => v.lang.toLowerCase().startsWith('en'));
       if (matchedVoice) {
@@ -814,7 +814,7 @@
     }
 
     // -------------------------------------------------------------
-    // CHAT ENGINE & CLOUDFLARE COMMUNICATIONS
+    // CHAT ENGINE
     // -------------------------------------------------------------
     async function sendMessage() {
       const input = document.getElementById("userInput");
@@ -831,7 +831,7 @@
       const aiMsgObj = appendMessage("Thinking...", "ai");
 
       const controller = new AbortController();
-      const timeoutTimer = setTimeout(() => controller.abort(), 30000);
+      const timeoutTimer = setTimeout(() => controller.abort(), 25000);
 
       try {
         const response = await fetch(WORKER_URL, {
@@ -846,8 +846,6 @@
         const reply = data.reply || "No response received.";
 
         renderAiMessage(aiMsgObj, reply);
-
-        // NOTE: Auto-speak has been REMOVED. Audio only plays when user taps Speak!
 
       } catch (err) {
         clearTimeout(timeoutTimer);
@@ -877,32 +875,46 @@
       return { element: wrapper, bubble: bubble };
     }
 
+    // Clean parser: strictly isolates Line 1 correction from conversational reply
     function renderAiMessage(msgObj, fullText) {
       msgObj.bubble.innerHTML = "";
 
-      const correctionMatch = fullText.match(/(?:Correction|Fix):\s*([^\n]+)/i);
+      let correctionText = "";
       let conversationalReply = fullText;
 
-      if (correctionMatch) {
-        const correctionDiv = document.createElement("div");
-        correctionDiv.className = "correction-box";
-        correctionDiv.innerHTML = `<strong>Correction:</strong> ${correctionMatch[1]}`;
-        msgObj.bubble.appendChild(correctionDiv);
-        conversationalReply = fullText.replace(correctionMatch[0], "").trim();
+      const match = fullText.match(/^(?:Correction|Fix):\s*([^\n\r]+)/i);
+
+      if (match) {
+        correctionText = match[1].trim();
+        conversationalReply = fullText.replace(match[0], "").trim();
       }
 
-      const replySpan = document.createElement("span");
-      replySpan.innerText = conversationalReply || fullText;
-      msgObj.bubble.appendChild(replySpan);
+      if (correctionText) {
+        const correctionDiv = document.createElement("div");
+        correctionDiv.className = "correction-box";
+        correctionDiv.innerHTML = `<strong>Correction:</strong> ${correctionText}`;
+        msgObj.bubble.appendChild(correctionDiv);
+      }
 
-      // Redesigned Transparent White-Outline Speak Pill
+      if (conversationalReply && conversationalReply !== correctionText) {
+        const replySpan = document.createElement("span");
+        replySpan.innerText = conversationalReply;
+        msgObj.bubble.appendChild(replySpan);
+      } else if (!correctionText) {
+        const fallbackSpan = document.createElement("span");
+        fallbackSpan.innerText = fullText;
+        msgObj.bubble.appendChild(fallbackSpan);
+      }
+
       const speakBtn = document.createElement("button");
       speakBtn.className = "speak-btn";
       speakBtn.innerHTML = `
         <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
         Speak
       `;
-      speakBtn.onclick = () => speakReply(fullText, speakBtn);
+      
+      const audioContent = conversationalReply || correctionText || fullText;
+      speakBtn.onclick = () => speakReply(audioContent, speakBtn);
       msgObj.bubble.appendChild(speakBtn);
 
       const chatBox = document.getElementById("chat-box");

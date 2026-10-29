@@ -2,35 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>YOKAZ AI — Just Speak With Yakoz AI</title>
-  
-  <!-- Inter & Space Grotesk fonts + FontAwesome -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <title>YOKAZ AI | AI Language Tutor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --bg-base: #000000;
-      --bg-surface: #050505;
-      --glass-surface: rgba(14, 14, 16, 0.65);
-      --glass-surface-hover: rgba(24, 24, 28, 0.75);
-      --glass-border: rgba(255, 255, 255, 0.12);
-      --glass-border-bright: rgba(255, 255, 255, 0.45);
-      --white-glow-soft: 0 0 25px rgba(255, 255, 255, 0.18);
-      --white-glow-strong: 0 0 35px rgba(255, 255, 255, 0.45);
-      --accent-white: #ffffff;
-      --accent-silver: #cbd5e1;
-      --text-primary: #ffffff;
-      --text-secondary: #a1a1aa;
-      --text-muted: #71717a;
-      --bubble-user: linear-gradient(135deg, #18181b 0%, #09090b 100%);
-      --bubble-ai: rgba(12, 12, 14, 0.75);
-      --blur-strength: 24px;
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --safe-top: env(safe-area-inset-top, 0px);
+      --bg-black: #000000;
+      --glass-base: rgba(10, 10, 10, 0.65);
+      --glass-card: rgba(16, 16, 16, 0.75);
+      --glass-input: rgba(14, 14, 14, 0.85);
+      --border-soft: rgba(255, 255, 255, 0.12);
+      --border-highlight: rgba(255, 255, 255, 0.35);
+      --white-glow-soft: 0 0 20px rgba(255, 255, 255, 0.15);
+      --white-glow-strong: 0 0 30px rgba(255, 255, 255, 0.45);
+      --text-main: #ffffff;
+      --text-muted: #8e8e93;
+      --accent-pill: #1c1c1e;
     }
 
     * {
@@ -38,938 +28,645 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    body {
-      background-color: var(--bg-base);
-      color: var(--text-primary);
-      height: 100vh;
-      height: 100dvh;
-      width: 100vw;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    /* Monochrome Pure White Ambient Radial Glows */
-    .ambient-bg {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .ambient-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(110px);
-      will-change: transform;
-      animation: floatWhiteLight 20s ease-in-out infinite alternate;
-    }
-
-    .orb-1 {
-      width: clamp(240px, 45vw, 460px);
-      height: clamp(240px, 45vw, 460px);
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 70%);
-      top: -100px;
-      left: 10%;
-      animation-duration: 18s;
-    }
-
-    .orb-2 {
-      width: clamp(260px, 50vw, 520px);
-      height: clamp(260px, 50vw, 520px);
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0) 70%);
-      bottom: -80px;
-      right: 5%;
-      animation-duration: 24s;
-      animation-delay: -5s;
-    }
-
-    .orb-3 {
-      width: clamp(180px, 30vw, 320px);
-      height: clamp(180px, 30vw, 320px);
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 75%);
-      top: 45%;
-      left: 45%;
-      animation-duration: 22s;
-    }
-
-    @keyframes floatWhiteLight {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(30px, -25px) scale(1.1); }
-      100% { transform: translate(-25px, 25px) scale(0.95); }
-    }
-
-    /* App Shell */
-    .app-container {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
+    html, body {
       height: 100%;
-      max-width: 920px;
-      margin: 0 auto;
-      width: 100%;
-      padding: calc(10px + var(--safe-top)) 16px calc(12px + var(--safe-bottom)) 16px;
-      gap: 10px;
-    }
-
-    /* Pure Black Frosted Glass Header */
-    header.liquid-nav {
-      background: var(--glass-surface);
-      backdrop-filter: blur(var(--blur-strength));
-      -webkit-backdrop-filter: blur(var(--blur-strength));
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.95), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-      border-radius: 18px;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .brand-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: #000000;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--white-glow-soft), inset 0 0 12px rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      font-size: 0.95rem;
-      flex-shrink: 0;
-    }
-
-    .brand-meta {
+      height: 100dvh;
+      background-color: var(--bg-black);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      min-width: 0;
+    }
+
+    /* Ambient Liquid Specular Background */
+    .ambient-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-glow-1 {
+      position: absolute;
+      top: -10%;
+      left: 15%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+      filter: blur(60px);
+      animation: floatAura 14s infinite ease-in-out alternate;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      bottom: -15%;
+      right: 10%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+      filter: blur(70px);
+      animation: floatAura 18s infinite ease-in-out alternate-reverse;
+    }
+
+    @keyframes floatAura {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -40px) scale(1.15); }
+    }
+
+    /* Liquid Glass Header */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: calc(14px + env(safe-area-inset-top, 0px)) 20px 14px 20px;
+      background: var(--glass-base);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border-bottom: 1px solid var(--border-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      flex-direction: column;
     }
 
     .brand-title {
       font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
       font-weight: 700;
-      font-size: 1.05rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #ffffff;
-      text-shadow: 0 0 18px rgba(255, 255, 255, 0.65);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ffffff;
     }
 
     .brand-slogan {
-      font-size: 0.62rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
       font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      margin-top: 2px;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
+      gap: 10px;
     }
 
-    /* Selector Pill */
-    .select-pill {
+    .lang-select-wrap {
       position: relative;
-      background: rgba(8, 8, 10, 0.85);
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      padding: 6px 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
-      min-height: 36px;
     }
 
-    .select-pill:hover {
-      border-color: rgba(255, 255, 255, 0.4);
-      color: var(--text-primary);
-      box-shadow: var(--white-glow-soft);
-    }
-
-    .select-pill select {
+    select#targetLang {
       appearance: none;
-      background: transparent;
-      border: none;
-      color: inherit;
-      font-size: inherit;
-      font-weight: 600;
-      outline: none;
-      cursor: pointer;
-      padding-right: 14px;
-    }
-
-    .select-pill select option {
-      background: #09090b;
-      color: #fff;
-    }
-
-    .select-pill .fa-chevron-down {
-      position: absolute;
-      right: 8px;
-      pointer-events: none;
-      font-size: 0.6rem;
-      color: var(--text-muted);
-    }
-
-    /* Voice Limit Capsule */
-    .quota-capsule {
-      background: rgba(8, 8, 10, 0.85);
-      border: 1px solid var(--glass-border);
-      padding: 6px 12px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      min-height: 36px;
-      transition: all 0.25s ease;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
-    }
-
-    .quota-capsule.alert {
-      border-color: rgba(255, 255, 255, 0.5);
-      background: rgba(30, 30, 35, 0.9);
+      -webkit-appearance: none;
+      background: var(--accent-pill);
       color: #ffffff;
+      border: 1px solid var(--border-soft);
+      padding: 6px 26px 6px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    select#targetLang:focus {
+      border-color: var(--border-highlight);
       box-shadow: var(--white-glow-soft);
     }
 
-    .quota-dot {
+    .quota-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-soft);
+      padding: 6px 12px;
+      border-radius: 999px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .quota-badge .dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 0 10px #ffffff;
-      transition: all 0.3s;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
     }
 
-    .quota-capsule.alert .quota-dot {
-      background: #71717a;
-      box-shadow: 0 0 6px #71717a;
+    .quota-badge.depleted .dot {
+      background: #ef4444;
+      box-shadow: 0 0 8px #ef4444;
     }
 
-    /* Chat Log Viewport */
-    .chat-scroller {
+    /* Chat Canvas */
+    #chat-box {
+      position: relative;
+      z-index: 5;
       flex: 1;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 6px 2px 14px 2px;
+      padding: 20px 16px 24px 16px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+      gap: 16px;
+      scroll-behavior: smooth;
     }
 
-    .chat-scroller::-webkit-scrollbar {
+    #chat-box::-webkit-scrollbar {
       width: 4px;
     }
-
-    .chat-scroller::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 99px;
+    #chat-box::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
     }
 
-    /* Message Bubbles */
-    .message-row {
+    .msg-wrapper {
       display: flex;
       flex-direction: column;
-      width: 100%;
-      opacity: 0;
-      transform: translateY(10px) scale(0.98);
-      animation: bubbleEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      max-width: 86%;
+      animation: messageEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes bubbleEnter {
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+    @keyframes messageEnter {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    .message-row.user-row {
-      align-items: flex-end;
+    .msg-wrapper.user {
+      align-self: flex-end;
     }
 
-    .message-row.ai-row {
-      align-items: flex-start;
+    .msg-wrapper.ai {
+      align-self: flex-start;
     }
 
-    .bubble-user-card {
-      background: var(--bubble-user);
-      color: #ffffff;
-      padding: 12px 16px;
-      border-radius: 16px;
-      border-bottom-right-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      max-width: min(85%, 620px);
-      font-size: 0.92rem;
-      line-height: 1.5;
-      font-weight: 500;
-      box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.9), 0 0 16px rgba(255, 255, 255, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-      word-break: break-word;
-    }
-
-    .bubble-ai-card {
-      background: var(--bubble-ai);
-      backdrop-filter: blur(var(--blur-strength));
-      -webkit-backdrop-filter: blur(var(--blur-strength));
-      border: 1px solid var(--glass-border);
-      border-radius: 18px;
-      border-bottom-left-radius: 4px;
+    .msg-bubble {
       padding: 14px 18px;
-      max-width: min(90%, 680px);
-      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.95), var(--white-glow-soft), inset 0 1px 1px rgba(255, 255, 255, 0.22);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      border-radius: 18px;
       word-break: break-word;
       position: relative;
     }
 
-    /* Grammar Correction Highlight Card */
-    .correction-badge {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+    .user .msg-bubble {
+      background: #ffffff;
+      color: #000000;
+      font-weight: 500;
+      border-bottom-right-radius: 4px;
+      box-shadow: var(--white-glow-soft);
+    }
+
+    .ai .msg-bubble {
+      background: var(--glass-card);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid var(--border-soft);
+      color: #f3f4f6;
+      border-bottom-left-radius: 4px;
+    }
+
+    .correction-box {
+      margin-bottom: 8px;
       padding: 8px 12px;
+      background: rgba(234, 179, 8, 0.08);
+      border: 1px solid rgba(234, 179, 8, 0.25);
       border-radius: 10px;
-      font-size: 0.82rem;
-      color: #ffffff;
-      line-height: 1.4;
-      box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05);
+      font-size: 0.85rem;
+      color: #fef08a;
     }
 
-    .correction-badge i {
-      color: #ffffff;
-      margin-top: 2px;
-      font-size: 0.82rem;
-      text-shadow: 0 0 8px #ffffff;
-    }
-
-    .ai-text-content {
-      font-size: 0.92rem;
-      line-height: 1.55;
-      color: #f4f4f5;
-      font-weight: 400;
-    }
-
-    /* Pronounce / Soundwave Button */
-    .voice-action-row {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin-top: 2px;
-    }
-
-    .pronounce-btn {
+    .speak-btn {
+      margin-top: 10px;
+      align-self: flex-start;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      border: 1px solid var(--border-soft);
       color: #ffffff;
       padding: 6px 12px;
       border-radius: 999px;
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 600;
-      letter-spacing: 0.03em;
       cursor: pointer;
-      min-height: 34px;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.2s ease;
     }
 
-    .pronounce-btn:hover {
-      background: rgba(255, 255, 255, 0.14);
-      border-color: rgba(255, 255, 255, 0.45);
+    .speak-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--border-highlight);
       box-shadow: var(--white-glow-soft);
-      transform: translateY(-1px);
     }
 
-    .pronounce-btn:active {
-      transform: translateY(0);
-    }
-
-    .pronounce-btn.playing {
+    .speak-btn.playing {
       background: #ffffff;
       color: #000000;
       border-color: #ffffff;
       box-shadow: var(--white-glow-strong);
     }
 
-    .soundwave-bars {
+    .soundwave {
       display: inline-flex;
       align-items: center;
       gap: 2px;
-      height: 11px;
+      height: 12px;
     }
 
-    .soundwave-bars span {
+    .soundwave span {
       width: 2px;
+      height: 100%;
       background: currentColor;
-      border-radius: 1px;
-      height: 4px;
-      transition: all 0.2s;
+      border-radius: 2px;
+      animation: wave 1s infinite ease-in-out;
     }
 
-    .pronounce-btn.playing .soundwave-bars span:nth-child(1) { animation: wavePulse 0.6s infinite alternate ease-in-out; }
-    .pronounce-btn.playing .soundwave-bars span:nth-child(2) { animation: wavePulse 0.7s 0.15s infinite alternate ease-in-out; }
-    .pronounce-btn.playing .soundwave-bars span:nth-child(3) { animation: wavePulse 0.5s 0.3s infinite alternate ease-in-out; }
+    .soundwave span:nth-child(2) { animation-delay: 0.2s; }
+    .soundwave span:nth-child(3) { animation-delay: 0.4s; }
 
-    @keyframes wavePulse {
-      0% { height: 3px; }
-      100% { height: 11px; }
+    @keyframes wave {
+      0%, 100% { height: 4px; }
+      50% { height: 12px; }
     }
 
-    /* Skeleton Loading Wave */
-    .skeleton-bubble {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 12px 18px;
-    }
-
-    .pulse-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #ffffff;
-      opacity: 0.35;
-      animation: dotPulse 1.3s infinite ease-in-out both;
-    }
-
-    .pulse-dot:nth-child(1) { animation-delay: -0.32s; }
-    .pulse-dot:nth-child(2) { animation-delay: -0.16s; }
-    .pulse-dot:nth-child(3) { animation-delay: 0s; }
-
-    @keyframes dotPulse {
-      0%, 80%, 100% { transform: scale(0.65); opacity: 0.25; }
-      40% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 12px #ffffff; }
-    }
-
-    /* Floating Glass Input Deck */
+    /* Floating Liquid Input Deck */
     .input-deck {
-      background: var(--glass-surface);
-      backdrop-filter: blur(var(--blur-strength));
-      -webkit-backdrop-filter: blur(var(--blur-strength));
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 18px 45px -10px rgba(0, 0, 0, 0.95), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 6px 8px 6px 14px;
+      position: relative;
+      z-index: 10;
+      padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px)) 16px;
+      background: var(--glass-base);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .input-wrapper {
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-shrink: 0;
-      transition: all 0.3s ease;
-      min-height: 52px;
+      background: var(--glass-input);
+      border: 1px solid var(--border-soft);
+      border-radius: 999px;
+      padding: 5px 6px 5px 16px;
+      transition: all 0.25s ease;
     }
 
-    .input-deck:focus-within {
-      border-color: rgba(255, 255, 255, 0.5);
-      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 1), var(--white-glow-soft);
+    .input-wrapper:focus-within {
+      border-color: var(--border-highlight);
+      box-shadow: var(--white-glow-soft);
     }
 
-    .text-input-field {
+    input#userInput {
       flex: 1;
-      min-width: 0;
       background: transparent;
       border: none;
       outline: none;
       color: #ffffff;
-      font-size: 0.94rem;
-      padding: 8px 0;
+      font-size: 0.95rem;
+      font-family: inherit;
     }
 
-    .text-input-field::placeholder {
-      color: var(--text-muted);
+    input#userInput::placeholder {
+      color: #52525b;
     }
 
-    .controls-cluster {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .deck-btn {
-      width: 42px;
-      height: 42px;
-      min-width: 42px;
-      min-height: 42px;
-      border-radius: 12px;
-      border: 1px solid transparent;
+    .mic-btn, .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      touch-action: manipulation;
+      transition: all 0.2s ease;
+      outline: none;
+      flex-shrink: 0;
     }
 
-    /* Mic Button */
     .mic-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: var(--glass-border);
-      color: var(--text-secondary);
+      background: transparent;
+      color: #a1a1aa;
+      border: 1px solid transparent;
     }
 
     .mic-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
       color: #ffffff;
-      border-color: rgba(255, 255, 255, 0.3);
-      box-shadow: var(--white-glow-soft);
     }
 
-    .mic-btn.listening {
-      background: #ffffff;
-      border-color: #ffffff;
-      color: #000000;
-      animation: whiteMicPulse 1.4s infinite alternate ease-in-out;
+    .mic-btn.recording {
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+      animation: pulseMic 1.2s infinite;
     }
 
-    @keyframes whiteMicPulse {
-      0% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.6); }
-      100% { box-shadow: 0 0 25px rgba(255, 255, 255, 1); }
+    @keyframes pulseMic {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
     }
 
-    /* Send Button */
-    .send-action-btn {
+    .send-btn {
       background: #ffffff;
       color: #000000;
       box-shadow: var(--white-glow-soft);
     }
 
-    .send-action-btn:hover {
-      transform: translateY(-1px) scale(1.04);
+    .send-btn:hover {
+      transform: scale(1.04);
       box-shadow: var(--white-glow-strong);
     }
 
-    .send-action-btn:active {
-      transform: translateY(0) scale(0.96);
-    }
-
-    .send-action-btn:disabled {
-      opacity: 0.3;
+    .send-btn:disabled {
+      background: #27272a;
+      color: #52525b;
       cursor: not-allowed;
-      transform: none;
       box-shadow: none;
+      transform: none;
     }
 
-    /* Liquid Glass Modal */
-    .glass-modal-overlay {
+    /* Limit Warning Modal */
+    .modal-overlay {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       z-index: 100;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.3s ease;
     }
 
-    .glass-modal-overlay.active {
+    .modal-overlay.active {
       opacity: 1;
       pointer-events: auto;
     }
 
-    .upgrade-card {
-      background: rgba(10, 10, 12, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 1), var(--white-glow-strong);
-      border-radius: 20px;
-      max-width: 400px;
+    .modal-card {
+      background: #0a0a0a;
+      border: 1px solid var(--border-highlight);
+      box-shadow: var(--white-glow-strong);
+      padding: 28px 24px;
+      border-radius: 24px;
+      max-width: 360px;
       width: 100%;
-      padding: 24px 20px;
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      transform: scale(0.94);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: modalScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .glass-modal-overlay.active .upgrade-card {
-      transform: scale(1);
+    @keyframes modalScale {
+      from { transform: scale(0.92); }
+      to { transform: scale(1); }
     }
 
-    .upgrade-icon-ring {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: #000000;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-      color: #ffffff;
-      box-shadow: var(--white-glow-soft);
-    }
-
-    .upgrade-card h3 {
+    .modal-card h3 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: 0.04em;
+      font-size: 1.25rem;
+      margin-bottom: 8px;
     }
 
-    .upgrade-card p {
+    .modal-card p {
       font-size: 0.88rem;
-      color: var(--text-secondary);
+      color: var(--text-muted);
       line-height: 1.5;
+      margin-bottom: 20px;
     }
 
     .modal-close-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 999px;
       background: #ffffff;
       color: #000000;
-      font-weight: 700;
       border: none;
-      width: 100%;
-      min-height: 44px;
-      padding: 12px;
-      border-radius: 12px;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: var(--white-glow-soft);
-      transition: all 0.2s;
+      transition: 0.2s;
     }
 
     .modal-close-btn:hover {
       box-shadow: var(--white-glow-strong);
-      transform: translateY(-1px);
-    }
-
-    /* Small Mobile Breakpoints (<= 480px) */
-    @media (max-width: 480px) {
-      .app-container {
-        padding: calc(6px + var(--safe-top)) 10px calc(8px + var(--safe-bottom)) 10px;
-        gap: 8px;
-      }
-      header.liquid-nav {
-        padding: 8px 12px;
-        border-radius: 16px;
-      }
-      .brand-logo {
-        width: 32px;
-        height: 32px;
-        font-size: 0.85rem;
-      }
-      .brand-title {
-        font-size: 0.95rem;
-      }
-      .brand-slogan {
-        display: none;
-      }
-      .bubble-ai-card, .bubble-user-card {
-        max-width: 95%;
-        padding: 11px 14px;
-        font-size: 0.88rem;
-      }
-      .select-pill, .quota-capsule {
-        padding: 4px 8px;
-        font-size: 0.72rem;
-        min-height: 32px;
-      }
-      .input-deck {
-        padding: 4px 6px 4px 12px;
-        border-radius: 18px;
-        min-height: 48px;
-      }
-      .deck-btn {
-        width: 38px;
-        height: 38px;
-        min-width: 38px;
-        min-height: 38px;
-      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Ambient Pure White Glow Meshes -->
-  <div class="ambient-bg">
-    <div class="ambient-orb orb-1"></div>
-    <div class="ambient-orb orb-2"></div>
-    <div class="ambient-orb orb-3"></div>
+  <div class="ambient-container">
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
   </div>
 
-  <div class="app-container">
-    <!-- Liquid Glass Navigation Header -->
-    <header class="liquid-nav">
-      <div class="brand-section">
-        <div class="brand-logo">
-          <i class="fa-solid fa-bolt"></i>
-        </div>
-        <div class="brand-meta">
-          <div class="brand-title">YOKAZ AI</div>
-          <div class="brand-slogan">JUST SPEAK WITH YAKOZ AI</div>
-        </div>
+  <header>
+    <div class="brand-wrap">
+      <div class="brand-title"><span></span>YOKAZ AI</div>
+      <div class="brand-slogan">JUST SPEAK WITH YOKAZ AI</div>
+    </div>
+    <div class="header-actions">
+      <div class="lang-select-wrap">
+        <select id="targetLang" onchange="switchTargetLang()">
+          <option value="English">English</option>
+          <option value="Spanish">Spanish</option>
+          <option value="French">French</option>
+          <option value="German">German</option>
+          <option value="Italian">Italian</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Malayalam">Malayalam</option>
+        </select>
       </div>
-
-      <div class="header-actions">
-        <!-- Target Language Selector -->
-        <div class="select-pill" title="Target Language">
-          <i class="fa-solid fa-globe"></i>
-          <select id="targetLanguage" onchange="handleLanguageChange()">
-            <option value="English" selected>English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-            <option value="German">German</option>
-            <option value="Japanese">Japanese</option>
-            <option value="Malayalam">Malayalam</option>
-            <option value="Hindi">Hindi</option>
-            <option value="Italian">Italian</option>
-          </select>
-          <i class="fa-solid fa-chevron-down"></i>
-        </div>
-
-        <!-- Freemium Voice Capsule -->
-        <div class="quota-capsule" id="quotaCapsule" title="Daily Voice Limit">
-          <div class="quota-dot"></div>
-          <span id="quotaText">Voice: 5/5</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- Scrollable Chat Messages -->
-    <div class="chat-scroller" id="chatBox">
-      <!-- AI Welcome Message -->
-      <div class="message-row ai-row">
-        <div class="bubble-ai-card">
-          <div class="ai-text-content">
-            Welcome to <strong>YOKAZ AI</strong>. Tap below or type anything in your target language, and I will correct your mistakes and speak back. Just speak with Yakoz AI!
-          </div>
-          <div class="voice-action-row">
-            <button class="pronounce-btn" onclick="playSpeech(this, 'Welcome to YOKAZ AI. Just speak with Yakoz AI!')">
-              <div class="soundwave-bars"><span></span><span></span><span></span></div>
-              <span>Listen</span>
-            </button>
-          </div>
-        </div>
+      <div class="quota-badge" id="quotaBadge">
+        <span class="dot"></span>
+        <span id="quotaText">Voice: 5/5</span>
       </div>
     </div>
+  </header>
 
-    <!-- Floating Glass Input Bar -->
-    <div class="input-deck">
-      <input 
-        type="text" 
-        id="userInput" 
-        class="text-input-field" 
-        placeholder="Type or tap mic to speak..." 
-        autocomplete="off"
-        spellcheck="false"
-      />
-      
-      <div class="controls-cluster">
-        <!-- Speech-to-Text Mic Button -->
-        <button class="deck-btn mic-btn" id="micBtn" title="Speak through microphone" onclick="toggleSpeechRecognition()">
-          <i class="fa-solid fa-microphone"></i>
-        </button>
-
-        <!-- Send Button -->
-        <button class="deck-btn send-action-btn" id="sendBtn" title="Send message" onclick="submitMessage()">
-          <i class="fa-solid fa-arrow-up"></i>
-        </button>
+  <main id="chat-box">
+    <div class="msg-wrapper ai">
+      <div class="msg-bubble">
+        Welcome to <strong>YOKAZ AI</strong>. Speak or write naturally in your selected language. I will correct any errors and respond instantly.
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- Voice Limit Paywall Modal -->
-  <div class="glass-modal-overlay" id="limitModal">
-    <div class="upgrade-card">
-      <div class="upgrade-icon-ring">
-        <i class="fa-solid fa-volume-high"></i>
-      </div>
-      <h3>Voice Limit Reached</h3>
-      <p>
-        You have used all <strong>5 free daily audio voice responses</strong>. Unlimited text chat with YOKAZ AI remains free forever!
-      </p>
-      <button class="modal-close-btn" onclick="closeLimitModal()">Continue Practicing Text</button>
+  <footer class="input-deck">
+    <div class="input-wrapper">
+      <button class="mic-btn" id="micBtn" onclick="toggleSpeechRecognition()" title="Voice Input">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/>
+        </svg>
+      </button>
+      <input type="text" id="userInput" placeholder="Speak or type a message..." autocomplete="off">
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="limitModal">
+    <div class="modal-card">
+      <h3>Audio Limit Reached</h3>
+      <p>You have used your 5 free audio responses for today. Don't worry—unlimited text practice with YOKAZ AI remains free forever. Your 5 voice plays reset tonight at midnight.</p>
+      <button class="modal-close-btn" onclick="closeLimitModal()">Continue Text Chat</button>
     </div>
   </div>
 
   <script>
-    // ==========================================
-    // 1. CONFIGURATION & STATE
-    // ==========================================
+    // -------------------------------------------------------------
+    // CONFIGURATION & PERSISTENCE
+    // -------------------------------------------------------------
     const WORKER_URL = "https://language-tutor-api.ashishkaji08.workers.dev/";
-    
     const VOICE_LIMIT = 5;
-    let voiceUsage = parseInt(localStorage.getItem("dailyVoiceCount") || "0");
-    let isRecognizing = false;
-    let speechRecognizer = null;
-    let isAudioUnlocked = false;
-    let cachedVoices = [];
-    let chromeTtsResumeInterval = null;
 
-    // Language mapping for Web Speech API
-    const LANG_CODES = {
-      English: "en-US",
-      Spanish: "es-ES",
-      French: "fr-FR",
-      German: "de-DE",
-      Japanese: "ja-JP",
-      Malayalam: "ml-IN",
-      Hindi: "hi-IN",
-      Italian: "it-IT"
+    // Daily Midnight Auto-Reset Routine
+    const today = new Date().toISOString().slice(0, 10);
+    const savedDate = localStorage.getItem("yokaz_voice_date");
+
+    if (savedDate !== today) {
+      localStorage.setItem("yokaz_voice_date", today);
+      localStorage.setItem("yokaz_voice_count", "0");
+    }
+
+    let voiceCount = parseInt(localStorage.getItem("yokaz_voice_count") || "0");
+    updateVoiceUI();
+
+    // Unlock Web Audio policies on initial mobile touch
+    let audioUnlocked = false;
+    window.addEventListener("click", unlockAudioSilently, { once: true });
+    window.addEventListener("touchstart", unlockAudioSilently, { once: true });
+
+    function unlockAudioSilently() {
+      if (audioUnlocked || !('speechSynthesis' in window)) return;
+      const blankUtterance = new SpeechSynthesisUtterance('');
+      window.speechSynthesis.speak(blankUtterance);
+      audioUnlocked = true;
+    }
+
+    function updateVoiceUI() {
+      const remaining = Math.max(0, VOICE_LIMIT - voiceCount);
+      const textEl = document.getElementById("quotaText");
+      const badgeEl = document.getElementById("quotaBadge");
+      
+      textEl.innerText = `Voice: ${remaining}/${VOICE_LIMIT}`;
+      if (remaining === 0) {
+        badgeEl.classList.add("depleted");
+      } else {
+        badgeEl.classList.remove("depleted");
+      }
+    }
+
+    function closeLimitModal() {
+      document.getElementById("limitModal").classList.remove("active");
+    }
+
+    // -------------------------------------------------------------
+    // SPEECH SYNTHESIS ENGINE (TTS)
+    // -------------------------------------------------------------
+    let availableVoices = [];
+    if ('speechSynthesis' in window) {
+      speechSynthesis.onvoiceschanged = () => {
+        availableVoices = speechSynthesis.getVoices();
+      };
+    }
+
+    const LANG_VOICE_MAP = {
+      English: 'en',
+      Spanish: 'es',
+      French: 'fr',
+      German: 'de',
+      Italian: 'it',
+      Hindi: 'hi',
+      Malayalam: 'ml'
     };
 
-    // ==========================================
-    // 2. MOBILE AUDIO & VOICE ENGINE INITIALIZATION
-    // ==========================================
-    // Populate and cache voices asynchronously across browsers
-    function loadVoices() {
-      if ('speechSynthesis' in window) {
-        cachedVoices = window.speechSynthesis.getVoices();
-      }
-    }
-    loadVoices();
-    if ('speechSynthesis' in window && window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-    }
-
-    // Unlock browser audio restrictions on the very first touch/click
-    function unlockAudioOnFirstGesture() {
-      if (isAudioUnlocked || !('speechSynthesis' in window)) return;
-      try {
-        const dummy = new SpeechSynthesisUtterance('');
-        dummy.volume = 0;
-        window.speechSynthesis.speak(dummy);
-        isAudioUnlocked = true;
-      } catch (e) {
-        // Silently catch in case browser refuses zero-length speech
-      }
-      document.removeEventListener('click', unlockAudioOnFirstGesture);
-      document.removeEventListener('touchstart', unlockAudioOnFirstGesture);
-    }
-    document.addEventListener('click', unlockAudioOnFirstGesture, { once: true });
-    document.addEventListener('touchstart', unlockAudioOnFirstGesture, { once: true });
-
-    // Initialize Quota UI
-    updateQuotaUI();
-
-    function updateQuotaUI() {
-      const remaining = Math.max(0, VOICE_LIMIT - voiceUsage);
-      const textElem = document.getElementById("quotaText");
-      const capsule = document.getElementById("quotaCapsule");
-
-      textElem.innerText = `Voice: ${remaining}/${VOICE_LIMIT}`;
-      if (remaining === 0) {
-        capsule.classList.add("alert");
-      } else {
-        capsule.classList.remove("alert");
-      }
-    }
-
-    function handleLanguageChange() {
-      const selLang = document.getElementById("targetLanguage").value;
-      appendAIMessage(`Language set to ${selLang}. Just speak with Yakoz AI!`);
-    }
-
-    // ==========================================
-    // 3. ROBUST TEXT-TO-SPEECH (TTS) SYSTEM
-    // ==========================================
-    function getBestVoiceForLang(langCode) {
-      if (!cachedVoices || cachedVoices.length === 0) {
-        loadVoices();
-      }
-      // Exact language match (e.g., 'es-ES')
-      let voice = cachedVoices.find(v => v.lang === langCode || v.lang.replace('_', '-') === langCode);
-      if (voice) return voice;
-
-      // Prefix match (e.g., 'es' for 'es-US')
-      const prefix = langCode.split('-')[0].toLowerCase();
-      voice = cachedVoices.find(v => v.lang.toLowerCase().startsWith(prefix));
-      return voice || null;
-    }
-
-    function playSpeech(buttonElem, text) {
+    function speakReply(text, btnElement = null) {
       if (!('speechSynthesis' in window)) {
-        alert("Your browser does not support text-to-speech.");
+        alert("Text-to-speech is not supported on this browser.");
         return;
       }
 
-      if (voiceUsage >= VOICE_LIMIT) {
-        openLimitModal();
+      if (voiceCount >= VOICE_LIMIT) {
+        document.getElementById("limitModal").classList.add("active");
         return;
       }
 
-      // Clear any pending/hung utterance
-      clearInterval(chromeTtsResumeInterval);
       window.speechSynthesis.cancel();
 
-      // Reset any active button states
-      document.querySelectorAll('.pronounce-btn.playing').forEach(btn => btn.classList.remove('playing'));
+      // Isolate conversational reply if corrections exist
+      const cleanText = text.replace(/Correction:.*?\n/gi, '').trim() || text;
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      const targetLang = document.getElementById("targetLang").value;
+      const targetPrefix = LANG_VOICE_MAP[targetLang] || 'en';
 
-      const selLang = document.getElementById("targetLanguage").value;
-      const langCode = LANG_CODES[selLang] || "en-US";
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = langCode;
-      utterance.rate = 0.92;
-
-      const matchingVoice = getBestVoiceForLang(langCode);
-      if (matchingVoice) {
-        utterance.voice = matchingVoice;
+      if (!availableVoices.length) {
+        availableVoices = window.speechSynthesis.getVoices();
       }
 
-      if (buttonElem) {
-        buttonElem.classList.add("playing");
+      const matchedVoice = availableVoices.find(v => v.lang.toLowerCase().startsWith(targetPrefix));
+      if (matchedVoice) {
+        utterance.voice = matchedVoice;
+      }
+      utterance.lang = targetPrefix;
+      utterance.rate = 0.95;
+
+      if (btnElement) {
+        btnElement.classList.add("playing");
+        btnElement.innerHTML = `
+          <div class="soundwave"><span></span><span></span><span></span></div>
+          Speaking...
+        `;
       }
 
-      const resetSpeechState = () => {
-        clearInterval(chromeTtsResumeInterval);
-        if (buttonElem) buttonElem.classList.remove("playing");
+      utterance.onend = () => {
+        if (btnElement) {
+          btnElement.classList.remove("playing");
+          btnElement.innerHTML = `🔊 Pronounce`;
+        }
       };
 
-      utterance.onend = resetSpeechState;
-      utterance.onerror = resetSpeechState;
+      utterance.onerror = () => {
+        if (btnElement) {
+          btnElement.classList.remove("playing");
+          btnElement.innerHTML = `🔊 Pronounce`;
+        }
+      };
 
-      // Fix for Chromium long utterance timeout bug (pauses around 15s)
-      chromeTtsResumeInterval = setInterval(() => {
+      // Workaround for long-utterance browser freeze
+      const resumeInterval = setInterval(() => {
         if (!window.speechSynthesis.speaking) {
-          clearInterval(chromeTtsResumeInterval);
+          clearInterval(resumeInterval);
         } else {
           window.speechSynthesis.pause();
           window.speechSynthesis.resume();
@@ -978,222 +675,173 @@
 
       window.speechSynthesis.speak(utterance);
 
-      voiceUsage++;
-      localStorage.setItem("dailyVoiceCount", voiceUsage);
-      updateQuotaUI();
+      // Increment daily quota count
+      voiceCount++;
+      localStorage.setItem("yokaz_voice_count", voiceCount);
+      updateVoiceUI();
     }
 
-    // ==========================================
-    // 4. SPEECH RECOGNITION (MIC INPUT)
-    // ==========================================
-    function initSpeechRecognition() {
+    // -------------------------------------------------------------
+    // SPEECH RECOGNITION ENGINE (STT)
+    // -------------------------------------------------------------
+    let recognition = null;
+    let isRecording = false;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Microphone recognition is not supported in this browser. Please use Chrome or Safari.");
-        return null;
-      }
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
 
-      const recognizer = new SpeechRecognition();
-      recognizer.continuous = false;
-      recognizer.interimResults = false;
-
-      recognizer.onstart = () => {
-        isRecognizing = true;
-        document.getElementById("micBtn").classList.add("listening");
-      };
-
-      recognizer.onresult = (event) => {
+      recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         document.getElementById("userInput").value = transcript;
-        submitMessage();
+        toggleSpeechRecognition();
+        sendMessage();
       };
 
-      recognizer.onerror = (e) => {
-        isRecognizing = false;
-        document.getElementById("micBtn").classList.remove("listening");
-        if (e.error === 'not-allowed') {
-          alert("Microphone access was denied. Please allow microphone permissions in your browser settings.");
-        }
+      recognition.onerror = () => {
+        toggleSpeechRecognition();
       };
 
-      recognizer.onend = () => {
-        isRecognizing = false;
-        document.getElementById("micBtn").classList.remove("listening");
+      recognition.onend = () => {
+        if (isRecording) toggleSpeechRecognition();
       };
-
-      return recognizer;
     }
 
     function toggleSpeechRecognition() {
-      if (!speechRecognizer) {
-        speechRecognizer = initSpeechRecognition();
-        if (!speechRecognizer) return;
+      if (!recognition) {
+        alert("Speech-to-text is not supported on this browser.");
+        return;
       }
 
-      const selLang = document.getElementById("targetLanguage").value;
-      speechRecognizer.lang = LANG_CODES[selLang] || "en-US";
+      const micBtn = document.getElementById("micBtn");
+      const targetLang = document.getElementById("targetLang").value;
+      const targetCode = LANG_VOICE_MAP[targetLang] || 'en-US';
 
-      if (isRecognizing) {
-        speechRecognizer.stop();
-      } else {
+      if (!isRecording) {
+        recognition.lang = targetCode;
         try {
-          speechRecognizer.start();
-        } catch (err) {
-          // Restart if already active
-          speechRecognizer.stop();
+          recognition.start();
+          isRecording = true;
+          micBtn.classList.add("recording");
+        } catch (e) {
+          console.error(e);
         }
+      } else {
+        recognition.stop();
+        isRecording = false;
+        micBtn.classList.remove("recording");
       }
     }
 
-    // ==========================================
-    // 5. MESSAGE DISPATCH & LIFECYCLE
-    // ==========================================
-    async function submitMessage() {
+    // -------------------------------------------------------------
+    // CHAT ENGINE & WORKER COMMUNICATIONS
+    // -------------------------------------------------------------
+    async function sendMessage() {
       const input = document.getElementById("userInput");
-      const btn = document.getElementById("sendBtn");
+      const sendBtn = document.getElementById("sendBtn");
       const text = input.value.trim();
+      const targetLang = document.getElementById("targetLang").value;
 
       if (!text) return;
 
-      appendUserMessage(text);
+      appendMessage(text, "user");
       input.value = "";
-      btn.disabled = true;
+      sendBtn.disabled = true;
 
-      const skeletonRow = appendSkeletonLoader();
-      const targetLang = document.getElementById("targetLanguage").value;
+      const aiMsgObj = appendMessage("Thinking...", "ai");
+
+      const controller = new AbortController();
+      const timeoutTimer = setTimeout(() => controller.abort(), 20000);
 
       try {
         const response = await fetch(WORKER_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text, targetLanguage: targetLang })
+          body: JSON.stringify({ message: text, targetLanguage: targetLang }),
+          signal: controller.signal
         });
+        clearTimeout(timeoutTimer);
 
         const data = await response.json();
-        skeletonRow.remove();
+        const reply = data.reply || "No response received.";
 
-        const reply = data.reply || "I couldn't process that sentence. Try again!";
-        renderAIResponseCard(reply);
+        renderAiMessage(aiMsgObj, reply);
+
+        // Auto-play audio response if daily slots remain
+        if (voiceCount < VOICE_LIMIT) {
+          const speakBtn = aiMsgObj.element.querySelector('.speak-btn');
+          speakReply(reply, speakBtn);
+        }
 
       } catch (err) {
-        skeletonRow.remove();
-        appendAIMessage(`⚠️ Connection error. Please verify your Worker URL or internet connection.`);
+        clearTimeout(timeoutTimer);
+        const errorText = err.name === "AbortError" 
+          ? "Request timed out. Please check your worker status." 
+          : `Network Error: ${err.message}`;
+        aiMsgObj.bubble.innerText = errorText;
       } finally {
-        btn.disabled = false;
+        sendBtn.disabled = false;
         input.focus();
       }
     }
 
-    // ==========================================
-    // 6. DOM CREATION & PARSING HELPERS
-    // ==========================================
-    function appendUserMessage(text) {
-      const chatBox = document.getElementById("chatBox");
-      const row = document.createElement("div");
-      row.className = "message-row user-row";
-      row.innerHTML = `<div class="bubble-user-card">${escapeHTML(text)}</div>`;
-      chatBox.appendChild(row);
-      scrollChatToBottom();
+    function appendMessage(text, role) {
+      const chatBox = document.getElementById("chatBox") || document.getElementById("chat-box");
+      const wrapper = document.createElement("div");
+      wrapper.className = `msg-wrapper ${role}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = "msg-bubble";
+      bubble.innerText = text;
+
+      wrapper.appendChild(bubble);
+      chatBox.appendChild(wrapper);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      return { element: wrapper, bubble: bubble };
     }
 
-    function renderAIResponseCard(rawText) {
-      const chatBox = document.getElementById("chatBox");
-      const row = document.createElement("div");
-      row.className = "message-row ai-row";
+    function renderAiMessage(msgObj, fullText) {
+      msgObj.bubble.innerHTML = "";
 
-      let correctionHTML = "";
-      let cleanedText = rawText;
+      // Check if response contains a grammar correction
+      const correctionMatch = fullText.match(/(?:Correction|Fix):\s*([^\n]+)/i);
+      let conversationalReply = fullText;
 
-      const correctionRegex = /(?:Correction|Correction:)\s*([^\n]+)/i;
-      const match = rawText.match(correctionRegex);
-
-      if (match) {
-        const correctionNote = match[1].trim();
-        correctionHTML = `
-          <div class="correction-badge">
-            <i class="fa-solid fa-circle-check"></i>
-            <div><strong>Correction:</strong> ${escapeHTML(correctionNote)}</div>
-          </div>
-        `;
-        cleanedText = rawText.replace(match[0], "").trim();
+      if (correctionMatch) {
+        const correctionDiv = document.createElement("div");
+        correctionDiv.className = "correction-box";
+        correctionDiv.innerHTML = `<strong>Correction:</strong> ${correctionMatch[1]}`;
+        msgObj.bubble.appendChild(correctionDiv);
+        conversationalReply = fullText.replace(correctionMatch[0], "").trim();
       }
 
-      const escapedSpokenText = cleanedText.replace(/'/g, "\\'").replace(/\n/g, " ");
+      const replySpan = document.createElement("span");
+      replySpan.innerText = conversationalReply || fullText;
+      msgObj.bubble.appendChild(replySpan);
 
-      row.innerHTML = `
-        <div class="bubble-ai-card">
-          ${correctionHTML}
-          <div class="ai-text-content">${escapeHTML(cleanedText)}</div>
-          <div class="voice-action-row">
-            <button class="pronounce-btn" onclick="playSpeech(this, '${escapedSpokenText}')">
-              <div class="soundwave-bars"><span></span><span></span><span></span></div>
-              <span>Pronounce</span>
-            </button>
-          </div>
-        </div>
-      `;
+      // Add Pronounce button
+      const speakBtn = document.createElement("button");
+      speakBtn.className = "speak-btn";
+      speakBtn.innerHTML = `🔊 Pronounce`;
+      speakBtn.onclick = () => speakReply(fullText, speakBtn);
+      msgObj.bubble.appendChild(speakBtn);
 
-      chatBox.appendChild(row);
-      scrollChatToBottom();
+      const chatBox = document.getElementById("chat-box");
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function appendAIMessage(plainText) {
-      const chatBox = document.getElementById("chatBox");
-      const row = document.createElement("div");
-      row.className = "message-row ai-row";
-      row.innerHTML = `<div class="bubble-ai-card"><div class="ai-text-content">${escapeHTML(plainText)}</div></div>`;
-      chatBox.appendChild(row);
-      scrollChatToBottom();
-    }
-
-    function appendSkeletonLoader() {
-      const chatBox = document.getElementById("chatBox");
-      const row = document.createElement("div");
-      row.className = "message-row ai-row";
-      row.innerHTML = `
-        <div class="bubble-ai-card skeleton-bubble">
-          <div class="pulse-dot"></div>
-          <div class="pulse-dot"></div>
-          <div class="pulse-dot"></div>
-        </div>
-      `;
-      chatBox.appendChild(row);
-      scrollChatToBottom();
-      return row;
-    }
-
-    function scrollChatToBottom() {
-      const chatBox = document.getElementById("chatBox");
-      chatBox.scrollTo({
-        top: chatBox.scrollHeight,
-        behavior: "smooth"
-      });
-    }
-
-    function openLimitModal() {
-      document.getElementById("limitModal").classList.add("active");
-    }
-
-    function closeLimitModal() {
-      document.getElementById("limitModal").classList.remove("active");
-    }
-
-    function escapeHTML(str) {
-      return str.replace(/[&<>'"]/g, 
-        tag => ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          "'": '&#39;',
-          '"': '&quot;'
-        }[tag] || tag)
-      );
+    function switchTargetLang() {
+      const selected = document.getElementById("targetLang").value;
+      appendMessage(`Switched target language to ${selected}. Let's practice!`, "ai");
     }
 
     document.getElementById("userInput").addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
-        submitMessage();
+        sendMessage();
       }
     });
   </script>

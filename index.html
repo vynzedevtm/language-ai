@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>YOKAZ AI — Just Speak With Yakoz AI</title>
   
   <!-- Inter & Space Grotesk fonts + FontAwesome -->
@@ -29,6 +29,8 @@
       --bubble-user: linear-gradient(135deg, #18181b 0%, #09090b 100%);
       --bubble-ai: rgba(12, 12, 14, 0.75);
       --blur-strength: 24px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-top: env(safe-area-inset-top, 0px);
     }
 
     * {
@@ -44,6 +46,7 @@
       color: var(--text-primary);
       height: 100vh;
       height: 100dvh;
+      width: 100vw;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -68,27 +71,27 @@
     }
 
     .orb-1 {
-      width: 460px;
-      height: 460px;
+      width: clamp(240px, 45vw, 460px);
+      height: clamp(240px, 45vw, 460px);
       background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 70%);
-      top: -160px;
-      left: 15%;
+      top: -100px;
+      left: 10%;
       animation-duration: 18s;
     }
 
     .orb-2 {
-      width: 520px;
-      height: 520px;
+      width: clamp(260px, 50vw, 520px);
+      height: clamp(260px, 50vw, 520px);
       background: radial-gradient(circle, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0) 70%);
-      bottom: -100px;
+      bottom: -80px;
       right: 5%;
       animation-duration: 24s;
       animation-delay: -5s;
     }
 
     .orb-3 {
-      width: 320px;
-      height: 320px;
+      width: clamp(180px, 30vw, 320px);
+      height: clamp(180px, 30vw, 320px);
       background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 75%);
       top: 45%;
       left: 45%;
@@ -111,8 +114,8 @@
       max-width: 920px;
       margin: 0 auto;
       width: 100%;
-      padding: 14px 18px 16px 18px;
-      gap: 12px;
+      padding: calc(10px + var(--safe-top)) 16px calc(12px + var(--safe-bottom)) 16px;
+      gap: 10px;
     }
 
     /* Pure Black Frosted Glass Header */
@@ -122,25 +125,27 @@
       -webkit-backdrop-filter: blur(var(--blur-strength));
       border: 1px solid var(--glass-border);
       box-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.95), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-      border-radius: 20px;
-      padding: 12px 20px;
+      border-radius: 18px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: all 0.3s ease;
+      flex-wrap: wrap;
+      gap: 8px;
       flex-shrink: 0;
     }
 
     .brand-section {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
     }
 
     .brand-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       background: #000000;
       border: 1px solid rgba(255, 255, 255, 0.35);
       display: flex;
@@ -148,39 +153,45 @@
       justify-content: center;
       box-shadow: var(--white-glow-soft), inset 0 0 12px rgba(255, 255, 255, 0.2);
       color: #ffffff;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
+      flex-shrink: 0;
     }
 
     .brand-meta {
       display: flex;
       flex-direction: column;
+      min-width: 0;
     }
 
     .brand-title {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #ffffff;
       text-shadow: 0 0 18px rgba(255, 255, 255, 0.65);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .brand-slogan {
-      font-size: 0.68rem;
+      font-size: 0.62rem;
       font-weight: 600;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
     /* Selector Pill */
@@ -188,16 +199,17 @@
       position: relative;
       background: rgba(8, 8, 10, 0.85);
       border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 7px 12px;
+      border-radius: 10px;
+      padding: 6px 10px;
       display: flex;
       align-items: center;
-      gap: 7px;
-      font-size: 0.82rem;
+      gap: 6px;
+      font-size: 0.78rem;
       color: var(--text-secondary);
       cursor: pointer;
       transition: all 0.25s ease;
       box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+      min-height: 36px;
     }
 
     .select-pill:hover {
@@ -225,9 +237,9 @@
 
     .select-pill .fa-chevron-down {
       position: absolute;
-      right: 10px;
+      right: 8px;
       pointer-events: none;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: var(--text-muted);
     }
 
@@ -235,13 +247,14 @@
     .quota-capsule {
       background: rgba(8, 8, 10, 0.85);
       border: 1px solid var(--glass-border);
-      padding: 7px 14px;
-      border-radius: 12px;
+      padding: 6px 12px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
+      gap: 6px;
+      font-size: 0.76rem;
       font-weight: 600;
+      min-height: 36px;
       transition: all 0.25s ease;
       box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
     }
@@ -254,8 +267,8 @@
     }
 
     .quota-dot {
-      width: 7px;
-      height: 7px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: #ffffff;
       box-shadow: 0 0 10px #ffffff;
@@ -271,16 +284,17 @@
     .chat-scroller {
       flex: 1;
       overflow-y: auto;
-      padding: 10px 4px 16px 4px;
+      -webkit-overflow-scrolling: touch;
+      padding: 6px 2px 14px 2px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       scrollbar-width: thin;
       scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
     }
 
     .chat-scroller::-webkit-scrollbar {
-      width: 5px;
+      width: 4px;
     }
 
     .chat-scroller::-webkit-scrollbar-thumb {
@@ -294,8 +308,8 @@
       flex-direction: column;
       width: 100%;
       opacity: 0;
-      transform: translateY(12px) scale(0.98);
-      animation: bubbleEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transform: translateY(10px) scale(0.98);
+      animation: bubbleEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes bubbleEnter {
@@ -316,12 +330,12 @@
     .bubble-user-card {
       background: var(--bubble-user);
       color: #ffffff;
-      padding: 13px 18px;
-      border-radius: 18px;
+      padding: 12px 16px;
+      border-radius: 16px;
       border-bottom-right-radius: 4px;
       border: 1px solid rgba(255, 255, 255, 0.22);
-      max-width: 82%;
-      font-size: 0.94rem;
+      max-width: min(85%, 620px);
+      font-size: 0.92rem;
       line-height: 1.5;
       font-weight: 500;
       box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.9), 0 0 16px rgba(255, 255, 255, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.25);
@@ -333,14 +347,14 @@
       backdrop-filter: blur(var(--blur-strength));
       -webkit-backdrop-filter: blur(var(--blur-strength));
       border: 1px solid var(--glass-border);
-      border-radius: 20px;
+      border-radius: 18px;
       border-bottom-left-radius: 4px;
-      padding: 16px 20px;
-      max-width: 88%;
+      padding: 14px 18px;
+      max-width: min(90%, 680px);
       box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.95), var(--white-glow-soft), inset 0 1px 1px rgba(255, 255, 255, 0.22);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       word-break: break-word;
       position: relative;
     }
@@ -349,27 +363,27 @@
     .correction-badge {
       display: flex;
       align-items: flex-start;
-      gap: 9px;
+      gap: 8px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 0.84rem;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.82rem;
       color: #ffffff;
-      line-height: 1.45;
+      line-height: 1.4;
       box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05);
     }
 
     .correction-badge i {
       color: #ffffff;
       margin-top: 2px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       text-shadow: 0 0 8px #ffffff;
     }
 
     .ai-text-content {
-      font-size: 0.95rem;
-      line-height: 1.6;
+      font-size: 0.92rem;
+      line-height: 1.55;
       color: #f4f4f5;
       font-weight: 400;
     }
@@ -389,12 +403,13 @@
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.18);
       color: #ffffff;
-      padding: 7px 14px;
+      padding: 6px 12px;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
       letter-spacing: 0.03em;
       cursor: pointer;
+      min-height: 34px;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -445,12 +460,12 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 14px 20px;
+      padding: 12px 18px;
     }
 
     .pulse-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #ffffff;
       opacity: 0.35;
@@ -473,13 +488,14 @@
       -webkit-backdrop-filter: blur(var(--blur-strength));
       border: 1px solid var(--glass-border);
       box-shadow: 0 18px 45px -10px rgba(0, 0, 0, 0.95), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-      border-radius: 22px;
-      padding: 8px 10px 8px 18px;
+      border-radius: 20px;
+      padding: 6px 8px 6px 14px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-shrink: 0;
       transition: all 0.3s ease;
+      min-height: 52px;
     }
 
     .input-deck:focus-within {
@@ -489,11 +505,12 @@
 
     .text-input-field {
       flex: 1;
+      min-width: 0;
       background: transparent;
       border: none;
       outline: none;
       color: #ffffff;
-      font-size: 0.96rem;
+      font-size: 0.94rem;
       padding: 8px 0;
     }
 
@@ -504,13 +521,16 @@
     .controls-cluster {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     .deck-btn {
       width: 42px;
       height: 42px;
-      border-radius: 14px;
+      min-width: 42px;
+      min-height: 42px;
+      border-radius: 12px;
       border: 1px solid transparent;
       display: flex;
       align-items: center;
@@ -519,6 +539,7 @@
       font-size: 0.95rem;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
+      touch-action: manipulation;
     }
 
     /* Mic Button */
@@ -581,7 +602,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease;
@@ -593,18 +614,18 @@
     }
 
     .upgrade-card {
-      background: rgba(10, 10, 12, 0.92);
+      background: rgba(10, 10, 12, 0.95);
       border: 1px solid rgba(255, 255, 255, 0.25);
       box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 1), var(--white-glow-strong);
-      border-radius: 24px;
-      max-width: 420px;
+      border-radius: 20px;
+      max-width: 400px;
       width: 100%;
-      padding: 30px 24px;
+      padding: 24px 20px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       transform: scale(0.94);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -614,31 +635,31 @@
     }
 
     .upgrade-icon-ring {
-      width: 64px;
-      height: 64px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       background: #000000;
       border: 1px solid rgba(255, 255, 255, 0.5);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.35rem;
       color: #ffffff;
       box-shadow: var(--white-glow-soft);
     }
 
     .upgrade-card h3 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: #ffffff;
       letter-spacing: 0.04em;
     }
 
     .upgrade-card p {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-secondary);
-      line-height: 1.55;
+      line-height: 1.5;
     }
 
     .modal-close-btn {
@@ -647,7 +668,8 @@
       font-weight: 700;
       border: none;
       width: 100%;
-      padding: 13px;
+      min-height: 44px;
+      padding: 12px;
       border-radius: 12px;
       cursor: pointer;
       box-shadow: var(--white-glow-soft);
@@ -659,15 +681,47 @@
       transform: translateY(-1px);
     }
 
-    @media (max-width: 640px) {
+    /* Small Mobile Breakpoints (<= 480px) */
+    @media (max-width: 480px) {
       .app-container {
-        padding: 8px 10px 10px 10px;
+        padding: calc(6px + var(--safe-top)) 10px calc(8px + var(--safe-bottom)) 10px;
+        gap: 8px;
       }
-      .bubble-ai-card, .bubble-user-card {
-        max-width: 92%;
+      header.liquid-nav {
+        padding: 8px 12px;
+        border-radius: 16px;
+      }
+      .brand-logo {
+        width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+      }
+      .brand-title {
+        font-size: 0.95rem;
       }
       .brand-slogan {
         display: none;
+      }
+      .bubble-ai-card, .bubble-user-card {
+        max-width: 95%;
+        padding: 11px 14px;
+        font-size: 0.88rem;
+      }
+      .select-pill, .quota-capsule {
+        padding: 4px 8px;
+        font-size: 0.72rem;
+        min-height: 32px;
+      }
+      .input-deck {
+        padding: 4px 6px 4px 12px;
+        border-radius: 18px;
+        min-height: 48px;
+      }
+      .deck-btn {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        min-height: 38px;
       }
     }
   </style>
@@ -725,10 +779,10 @@
       <div class="message-row ai-row">
         <div class="bubble-ai-card">
           <div class="ai-text-content">
-            Welcome to <strong>YOKAZ AI</strong>. Speak or type below, and I will correct your mistakes and speak back naturally. Just speak with Yakoz AI!
+            Welcome to <strong>YOKAZ AI</strong>. Tap below or type anything in your target language, and I will correct your mistakes and speak back. Just speak with Yakoz AI!
           </div>
           <div class="voice-action-row">
-            <button class="pronounce-btn" onclick="playSpeech(this, 'Welcome to YOKAZ AI. Speak or type below, and I will correct your mistakes and speak back naturally. Just speak with Yakoz AI!')">
+            <button class="pronounce-btn" onclick="playSpeech(this, 'Welcome to YOKAZ AI. Just speak with Yakoz AI!')">
               <div class="soundwave-bars"><span></span><span></span><span></span></div>
               <span>Listen</span>
             </button>
@@ -743,7 +797,7 @@
         type="text" 
         id="userInput" 
         class="text-input-field" 
-        placeholder="Type or tap the mic to speak..." 
+        placeholder="Type or tap mic to speak..." 
         autocomplete="off"
         spellcheck="false"
       />
@@ -770,7 +824,7 @@
       </div>
       <h3>Voice Limit Reached</h3>
       <p>
-        You have used all <strong>5 free daily audio voice responses</strong>. Unlimited text chat with YOKAZ AI is still active!
+        You have used all <strong>5 free daily audio voice responses</strong>. Unlimited text chat with YOKAZ AI remains free forever!
       </p>
       <button class="modal-close-btn" onclick="closeLimitModal()">Continue Practicing Text</button>
     </div>
@@ -780,13 +834,15 @@
     // ==========================================
     // 1. CONFIGURATION & STATE
     // ==========================================
-    // Replace with your Cloudflare Worker URL
     const WORKER_URL = "https://language-tutor-api.ashishkaji08.workers.dev/";
     
     const VOICE_LIMIT = 5;
     let voiceUsage = parseInt(localStorage.getItem("dailyVoiceCount") || "0");
     let isRecognizing = false;
     let speechRecognizer = null;
+    let isAudioUnlocked = false;
+    let cachedVoices = [];
+    let chromeTtsResumeInterval = null;
 
     // Language mapping for Web Speech API
     const LANG_CODES = {
@@ -800,7 +856,38 @@
       Italian: "it-IT"
     };
 
-    // Initialize Quota Badge
+    // ==========================================
+    // 2. MOBILE AUDIO & VOICE ENGINE INITIALIZATION
+    // ==========================================
+    // Populate and cache voices asynchronously across browsers
+    function loadVoices() {
+      if ('speechSynthesis' in window) {
+        cachedVoices = window.speechSynthesis.getVoices();
+      }
+    }
+    loadVoices();
+    if ('speechSynthesis' in window && window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    // Unlock browser audio restrictions on the very first touch/click
+    function unlockAudioOnFirstGesture() {
+      if (isAudioUnlocked || !('speechSynthesis' in window)) return;
+      try {
+        const dummy = new SpeechSynthesisUtterance('');
+        dummy.volume = 0;
+        window.speechSynthesis.speak(dummy);
+        isAudioUnlocked = true;
+      } catch (e) {
+        // Silently catch in case browser refuses zero-length speech
+      }
+      document.removeEventListener('click', unlockAudioOnFirstGesture);
+      document.removeEventListener('touchstart', unlockAudioOnFirstGesture);
+    }
+    document.addEventListener('click', unlockAudioOnFirstGesture, { once: true });
+    document.addEventListener('touchstart', unlockAudioOnFirstGesture, { once: true });
+
+    // Initialize Quota UI
     updateQuotaUI();
 
     function updateQuotaUI() {
@@ -818,34 +905,76 @@
 
     function handleLanguageChange() {
       const selLang = document.getElementById("targetLanguage").value;
-      appendAIMessage(`Language set to **${selLang}**. Speak or write to practice with YOKAZ AI.`);
+      appendAIMessage(`Language set to ${selLang}. Just speak with Yakoz AI!`);
     }
 
     // ==========================================
-    // 2. TEXT-TO-SPEECH (TTS) ENGINE
+    // 3. ROBUST TEXT-TO-SPEECH (TTS) SYSTEM
     // ==========================================
+    function getBestVoiceForLang(langCode) {
+      if (!cachedVoices || cachedVoices.length === 0) {
+        loadVoices();
+      }
+      // Exact language match (e.g., 'es-ES')
+      let voice = cachedVoices.find(v => v.lang === langCode || v.lang.replace('_', '-') === langCode);
+      if (voice) return voice;
+
+      // Prefix match (e.g., 'es' for 'es-US')
+      const prefix = langCode.split('-')[0].toLowerCase();
+      voice = cachedVoices.find(v => v.lang.toLowerCase().startsWith(prefix));
+      return voice || null;
+    }
+
     function playSpeech(buttonElem, text) {
+      if (!('speechSynthesis' in window)) {
+        alert("Your browser does not support text-to-speech.");
+        return;
+      }
+
       if (voiceUsage >= VOICE_LIMIT) {
         openLimitModal();
         return;
       }
 
+      // Clear any pending/hung utterance
+      clearInterval(chromeTtsResumeInterval);
       window.speechSynthesis.cancel();
 
+      // Reset any active button states
+      document.querySelectorAll('.pronounce-btn.playing').forEach(btn => btn.classList.remove('playing'));
+
       const selLang = document.getElementById("targetLanguage").value;
+      const langCode = LANG_CODES[selLang] || "en-US";
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = LANG_CODES[selLang] || "en-US";
+      utterance.lang = langCode;
       utterance.rate = 0.92;
 
-      buttonElem.classList.add("playing");
+      const matchingVoice = getBestVoiceForLang(langCode);
+      if (matchingVoice) {
+        utterance.voice = matchingVoice;
+      }
 
-      utterance.onend = () => {
-        buttonElem.classList.remove("playing");
+      if (buttonElem) {
+        buttonElem.classList.add("playing");
+      }
+
+      const resetSpeechState = () => {
+        clearInterval(chromeTtsResumeInterval);
+        if (buttonElem) buttonElem.classList.remove("playing");
       };
 
-      utterance.onerror = () => {
-        buttonElem.classList.remove("playing");
-      };
+      utterance.onend = resetSpeechState;
+      utterance.onerror = resetSpeechState;
+
+      // Fix for Chromium long utterance timeout bug (pauses around 15s)
+      chromeTtsResumeInterval = setInterval(() => {
+        if (!window.speechSynthesis.speaking) {
+          clearInterval(chromeTtsResumeInterval);
+        } else {
+          window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }
+      }, 10000);
 
       window.speechSynthesis.speak(utterance);
 
@@ -855,12 +984,12 @@
     }
 
     // ==========================================
-    // 3. SPEECH RECOGNITION (MIC INPUT)
+    // 4. SPEECH RECOGNITION (MIC INPUT)
     // ==========================================
     function initSpeechRecognition() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert("Your browser does not support voice input. Please use Chrome or Safari.");
+        alert("Microphone recognition is not supported in this browser. Please use Chrome or Safari.");
         return null;
       }
 
@@ -879,9 +1008,12 @@
         submitMessage();
       };
 
-      recognizer.onerror = () => {
+      recognizer.onerror = (e) => {
         isRecognizing = false;
         document.getElementById("micBtn").classList.remove("listening");
+        if (e.error === 'not-allowed') {
+          alert("Microphone access was denied. Please allow microphone permissions in your browser settings.");
+        }
       };
 
       recognizer.onend = () => {
@@ -904,12 +1036,17 @@
       if (isRecognizing) {
         speechRecognizer.stop();
       } else {
-        speechRecognizer.start();
+        try {
+          speechRecognizer.start();
+        } catch (err) {
+          // Restart if already active
+          speechRecognizer.stop();
+        }
       }
     }
 
     // ==========================================
-    // 4. MESSAGE DISPATCH & SKELETON LOADER
+    // 5. MESSAGE DISPATCH & LIFECYCLE
     // ==========================================
     async function submitMessage() {
       const input = document.getElementById("userInput");
@@ -948,7 +1085,7 @@
     }
 
     // ==========================================
-    // 5. DOM CREATION & PARSING HELPERS
+    // 6. DOM CREATION & PARSING HELPERS
     // ==========================================
     function appendUserMessage(text) {
       const chatBox = document.getElementById("chatBox");
@@ -998,11 +1135,6 @@
 
       chatBox.appendChild(row);
       scrollChatToBottom();
-
-      if (voiceUsage < VOICE_LIMIT) {
-        const btn = row.querySelector(".pronounce-btn");
-        playSpeech(btn, cleanedText);
-      }
     }
 
     function appendAIMessage(plainText) {

@@ -831,7 +831,7 @@
       const aiMsgObj = appendMessage("Thinking...", "ai");
 
       const controller = new AbortController();
-      const timeoutTimer = setTimeout(() => controller.abort(), 20000);
+      const timeoutTimer = setTimeout(() => controller.abort(), 30000);
 
       try {
         const response = await fetch(WORKER_URL, {

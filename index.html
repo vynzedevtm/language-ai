@@ -2,140 +2,1066 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LingoAI Tutor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>YOKAZ AI — Just Speak With Yakoz AI</title>
+  
+  <!-- Inter & Space Grotesk fonts + FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #0b0f19; color: #f8fafc; display: flex; flex-direction: column; height: 100vh; }
-    header { padding: 14px 18px; background: #1e293b; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
-    .title { font-weight: 700; font-size: 1rem; color: #38bdf8; }
-    .badge { font-size: 0.75rem; background: #0f172a; padding: 4px 10px; border-radius: 999px; border: 1px solid #475569; }
-    #chat-box { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-    .msg { max-width: 82%; padding: 10px 14px; border-radius: 12px; font-size: 0.95rem; line-height: 1.45; word-wrap: break-word; }
-    .user { align-self: flex-end; background: #2563eb; color: #ffffff; border-bottom-right-radius: 2px; }
-    .ai { align-self: flex-start; background: #1e293b; color: #e2e8f0; border-bottom-left-radius: 2px; border: 1px solid #334155; }
-    .ai button.voice-btn { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; background: #0284c7; border: none; color: white; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
-    .ai button.voice-btn:hover { background: #0369a1; }
-    #controls { padding: 12px 16px; background: #1e293b; display: flex; gap: 8px; border-top: 1px solid #334155; }
-    input { flex: 1; padding: 12px 14px; border-radius: 8px; border: 1px solid #475569; background: #0b0f19; color: #ffffff; outline: none; font-size: 0.95rem; }
-    input:focus { border-color: #38bdf8; }
-    button.send-btn { background: #059669; border: none; color: white; padding: 0 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    button.send-btn:disabled { background: #475569; cursor: not-allowed; }
-    #limit-banner { background: #be123c; color: white; text-align: center; padding: 6px; font-size: 0.8rem; font-weight: 600; display: none; }
+    :root {
+      --bg-base: #000000;
+      --bg-surface: #050505;
+      --glass-surface: rgba(14, 14, 16, 0.65);
+      --glass-surface-hover: rgba(24, 24, 28, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-bright: rgba(255, 255, 255, 0.45);
+      --white-glow-soft: 0 0 25px rgba(255, 255, 255, 0.18);
+      --white-glow-strong: 0 0 35px rgba(255, 255, 255, 0.45);
+      --accent-white: #ffffff;
+      --accent-silver: #cbd5e1;
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --bubble-user: linear-gradient(135deg, #18181b 0%, #09090b 100%);
+      --bubble-ai: rgba(12, 12, 14, 0.75);
+      --blur-strength: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Monochrome Pure White Ambient Radial Glows */
+    .ambient-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(110px);
+      will-change: transform;
+      animation: floatWhiteLight 20s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      width: 460px;
+      height: 460px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 70%);
+      top: -160px;
+      left: 15%;
+      animation-duration: 18s;
+    }
+
+    .orb-2 {
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0) 70%);
+      bottom: -100px;
+      right: 5%;
+      animation-duration: 24s;
+      animation-delay: -5s;
+    }
+
+    .orb-3 {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 75%);
+      top: 45%;
+      left: 45%;
+      animation-duration: 22s;
+    }
+
+    @keyframes floatWhiteLight {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, -25px) scale(1.1); }
+      100% { transform: translate(-25px, 25px) scale(0.95); }
+    }
+
+    /* App Shell */
+    .app-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 14px 18px 16px 18px;
+      gap: 12px;
+    }
+
+    /* Pure Black Frosted Glass Header */
+    header.liquid-nav {
+      background: var(--glass-surface);
+      backdrop-filter: blur(var(--blur-strength));
+      -webkit-backdrop-filter: blur(var(--blur-strength));
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.95), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--white-glow-soft), inset 0 0 12px rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 1.05rem;
+    }
+
+    .brand-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 0 18px rgba(255, 255, 255, 0.65);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-slogan {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Selector Pill */
+    .select-pill {
+      position: relative;
+      background: rgba(8, 8, 10, 0.85);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 7px 12px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .select-pill:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+      color: var(--text-primary);
+      box-shadow: var(--white-glow-soft);
+    }
+
+    .select-pill select {
+      appearance: none;
+      background: transparent;
+      border: none;
+      color: inherit;
+      font-size: inherit;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      padding-right: 14px;
+    }
+
+    .select-pill select option {
+      background: #09090b;
+      color: #fff;
+    }
+
+    .select-pill .fa-chevron-down {
+      position: absolute;
+      right: 10px;
+      pointer-events: none;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* Voice Limit Capsule */
+    .quota-capsule {
+      background: rgba(8, 8, 10, 0.85);
+      border: 1px solid var(--glass-border);
+      padding: 7px 14px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .quota-capsule.alert {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(30, 30, 35, 0.9);
+      color: #ffffff;
+      box-shadow: var(--white-glow-soft);
+    }
+
+    .quota-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 10px #ffffff;
+      transition: all 0.3s;
+    }
+
+    .quota-capsule.alert .quota-dot {
+      background: #71717a;
+      box-shadow: 0 0 6px #71717a;
+    }
+
+    /* Chat Log Viewport */
+    .chat-scroller {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 4px 16px 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    }
+
+    .chat-scroller::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .chat-scroller::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 99px;
+    }
+
+    /* Message Bubbles */
+    .message-row {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+      animation: bubbleEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes bubbleEnter {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .message-row.user-row {
+      align-items: flex-end;
+    }
+
+    .message-row.ai-row {
+      align-items: flex-start;
+    }
+
+    .bubble-user-card {
+      background: var(--bubble-user);
+      color: #ffffff;
+      padding: 13px 18px;
+      border-radius: 18px;
+      border-bottom-right-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      max-width: 82%;
+      font-size: 0.94rem;
+      line-height: 1.5;
+      font-weight: 500;
+      box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.9), 0 0 16px rgba(255, 255, 255, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      word-break: break-word;
+    }
+
+    .bubble-ai-card {
+      background: var(--bubble-ai);
+      backdrop-filter: blur(var(--blur-strength));
+      -webkit-backdrop-filter: blur(var(--blur-strength));
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      border-bottom-left-radius: 4px;
+      padding: 16px 20px;
+      max-width: 88%;
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.95), var(--white-glow-soft), inset 0 1px 1px rgba(255, 255, 255, 0.22);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      word-break: break-word;
+      position: relative;
+    }
+
+    /* Grammar Correction Highlight Card */
+    .correction-badge {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      color: #ffffff;
+      line-height: 1.45;
+      box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05);
+    }
+
+    .correction-badge i {
+      color: #ffffff;
+      margin-top: 2px;
+      font-size: 0.85rem;
+      text-shadow: 0 0 8px #ffffff;
+    }
+
+    .ai-text-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #f4f4f5;
+      font-weight: 400;
+    }
+
+    /* Pronounce / Soundwave Button */
+    .voice-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 2px;
+    }
+
+    .pronounce-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pronounce-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.45);
+      box-shadow: var(--white-glow-soft);
+      transform: translateY(-1px);
+    }
+
+    .pronounce-btn:active {
+      transform: translateY(0);
+    }
+
+    .pronounce-btn.playing {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+      box-shadow: var(--white-glow-strong);
+    }
+
+    .soundwave-bars {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      height: 11px;
+    }
+
+    .soundwave-bars span {
+      width: 2px;
+      background: currentColor;
+      border-radius: 1px;
+      height: 4px;
+      transition: all 0.2s;
+    }
+
+    .pronounce-btn.playing .soundwave-bars span:nth-child(1) { animation: wavePulse 0.6s infinite alternate ease-in-out; }
+    .pronounce-btn.playing .soundwave-bars span:nth-child(2) { animation: wavePulse 0.7s 0.15s infinite alternate ease-in-out; }
+    .pronounce-btn.playing .soundwave-bars span:nth-child(3) { animation: wavePulse 0.5s 0.3s infinite alternate ease-in-out; }
+
+    @keyframes wavePulse {
+      0% { height: 3px; }
+      100% { height: 11px; }
+    }
+
+    /* Skeleton Loading Wave */
+    .skeleton-bubble {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 20px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffffff;
+      opacity: 0.35;
+      animation: dotPulse 1.3s infinite ease-in-out both;
+    }
+
+    .pulse-dot:nth-child(1) { animation-delay: -0.32s; }
+    .pulse-dot:nth-child(2) { animation-delay: -0.16s; }
+    .pulse-dot:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes dotPulse {
+      0%, 80%, 100% { transform: scale(0.65); opacity: 0.25; }
+      40% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 12px #ffffff; }
+    }
+
+    /* Floating Glass Input Deck */
+    .input-deck {
+      background: var(--glass-surface);
+      backdrop-filter: blur(var(--blur-strength));
+      -webkit-backdrop-filter: blur(var(--blur-strength));
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 18px 45px -10px rgba(0, 0, 0, 0.95), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      border-radius: 22px;
+      padding: 8px 10px 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .input-deck:focus-within {
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 1), var(--white-glow-soft);
+    }
+
+    .text-input-field {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-size: 0.96rem;
+      padding: 8px 0;
+    }
+
+    .text-input-field::placeholder {
+      color: var(--text-muted);
+    }
+
+    .controls-cluster {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .deck-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    /* Mic Button */
+    .mic-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--glass-border);
+      color: var(--text-secondary);
+    }
+
+    .mic-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: var(--white-glow-soft);
+    }
+
+    .mic-btn.listening {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #000000;
+      animation: whiteMicPulse 1.4s infinite alternate ease-in-out;
+    }
+
+    @keyframes whiteMicPulse {
+      0% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.6); }
+      100% { box-shadow: 0 0 25px rgba(255, 255, 255, 1); }
+    }
+
+    /* Send Button */
+    .send-action-btn {
+      background: #ffffff;
+      color: #000000;
+      box-shadow: var(--white-glow-soft);
+    }
+
+    .send-action-btn:hover {
+      transform: translateY(-1px) scale(1.04);
+      box-shadow: var(--white-glow-strong);
+    }
+
+    .send-action-btn:active {
+      transform: translateY(0) scale(0.96);
+    }
+
+    .send-action-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Liquid Glass Modal */
+    .glass-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .glass-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .upgrade-card {
+      background: rgba(10, 10, 12, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 1), var(--white-glow-strong);
+      border-radius: 24px;
+      max-width: 420px;
+      width: 100%;
+      padding: 30px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      transform: scale(0.94);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-modal-overlay.active .upgrade-card {
+      transform: scale(1);
+    }
+
+    .upgrade-icon-ring {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #ffffff;
+      box-shadow: var(--white-glow-soft);
+    }
+
+    .upgrade-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+    }
+
+    .upgrade-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .modal-close-btn {
+      background: #ffffff;
+      color: #000000;
+      font-weight: 700;
+      border: none;
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: var(--white-glow-soft);
+      transition: all 0.2s;
+    }
+
+    .modal-close-btn:hover {
+      box-shadow: var(--white-glow-strong);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 8px 10px 10px 10px;
+      }
+      .bubble-ai-card, .bubble-user-card {
+        max-width: 92%;
+      }
+      .brand-slogan {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="title">⚡ LingoAI Voice Tutor</div>
-    <div class="badge" id="counter-badge">Voice: 5/5 Left</div>
-  </header>
+  <!-- Ambient Pure White Glow Meshes -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
 
-  <div id="limit-banner">Daily voice limit reached (5/5). Text chatting is unlimited!</div>
+  <div class="app-container">
+    <!-- Liquid Glass Navigation Header -->
+    <header class="liquid-nav">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <div class="brand-meta">
+          <div class="brand-title">YOKAZ AI</div>
+          <div class="brand-slogan">JUST SPEAK WITH YAKOZ AI</div>
+        </div>
+      </div>
 
-  <div id="chat-box">
-    <div class="msg ai">
-      Hey! Type or speak any sentence in English (even with errors), and I will fix it and reply!
+      <div class="header-actions">
+        <!-- Target Language Selector -->
+        <div class="select-pill" title="Target Language">
+          <i class="fa-solid fa-globe"></i>
+          <select id="targetLanguage" onchange="handleLanguageChange()">
+            <option value="English" selected>English</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+            <option value="German">German</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Malayalam">Malayalam</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Italian">Italian</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        <!-- Freemium Voice Capsule -->
+        <div class="quota-capsule" id="quotaCapsule" title="Daily Voice Limit">
+          <div class="quota-dot"></div>
+          <span id="quotaText">Voice: 5/5</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Scrollable Chat Messages -->
+    <div class="chat-scroller" id="chatBox">
+      <!-- AI Welcome Message -->
+      <div class="message-row ai-row">
+        <div class="bubble-ai-card">
+          <div class="ai-text-content">
+            Welcome to <strong>YOKAZ AI</strong>. Speak or type below, and I will correct your mistakes and speak back naturally. Just speak with Yakoz AI!
+          </div>
+          <div class="voice-action-row">
+            <button class="pronounce-btn" onclick="playSpeech(this, 'Welcome to YOKAZ AI. Speak or type below, and I will correct your mistakes and speak back naturally. Just speak with Yakoz AI!')">
+              <div class="soundwave-bars"><span></span><span></span><span></span></div>
+              <span>Listen</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Glass Input Bar -->
+    <div class="input-deck">
+      <input 
+        type="text" 
+        id="userInput" 
+        class="text-input-field" 
+        placeholder="Type or tap the mic to speak..." 
+        autocomplete="off"
+        spellcheck="false"
+      />
+      
+      <div class="controls-cluster">
+        <!-- Speech-to-Text Mic Button -->
+        <button class="deck-btn mic-btn" id="micBtn" title="Speak through microphone" onclick="toggleSpeechRecognition()">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+
+        <!-- Send Button -->
+        <button class="deck-btn send-action-btn" id="sendBtn" title="Send message" onclick="submitMessage()">
+          <i class="fa-solid fa-arrow-up"></i>
+        </button>
+      </div>
     </div>
   </div>
 
-  <div id="controls">
-    <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off" />
-    <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+  <!-- Voice Limit Paywall Modal -->
+  <div class="glass-modal-overlay" id="limitModal">
+    <div class="upgrade-card">
+      <div class="upgrade-icon-ring">
+        <i class="fa-solid fa-volume-high"></i>
+      </div>
+      <h3>Voice Limit Reached</h3>
+      <p>
+        You have used all <strong>5 free daily audio voice responses</strong>. Unlimited text chat with YOKAZ AI is still active!
+      </p>
+      <button class="modal-close-btn" onclick="closeLimitModal()">Continue Practicing Text</button>
+    </div>
   </div>
 
   <script>
-    // 1. PLACE YOUR CLOUDFLARE WORKER URL HERE:
+    // ==========================================
+    // 1. CONFIGURATION & STATE
+    // ==========================================
+    // Replace with your Cloudflare Worker URL
     const WORKER_URL = "https://language-tutor-api.ashishkaji08.workers.dev/";
-
+    
     const VOICE_LIMIT = 5;
-    let voiceCount = parseInt(localStorage.getItem("dailyVoiceCount") || "0");
-    updateBadge();
+    let voiceUsage = parseInt(localStorage.getItem("dailyVoiceCount") || "0");
+    let isRecognizing = false;
+    let speechRecognizer = null;
 
-    function updateBadge() {
-      const remaining = Math.max(0, VOICE_LIMIT - voiceCount);
-      document.getElementById("counter-badge").innerText = `Voice: ${remaining}/${VOICE_LIMIT} Left`;
+    // Language mapping for Web Speech API
+    const LANG_CODES = {
+      English: "en-US",
+      Spanish: "es-ES",
+      French: "fr-FR",
+      German: "de-DE",
+      Japanese: "ja-JP",
+      Malayalam: "ml-IN",
+      Hindi: "hi-IN",
+      Italian: "it-IT"
+    };
+
+    // Initialize Quota Badge
+    updateQuotaUI();
+
+    function updateQuotaUI() {
+      const remaining = Math.max(0, VOICE_LIMIT - voiceUsage);
+      const textElem = document.getElementById("quotaText");
+      const capsule = document.getElementById("quotaCapsule");
+
+      textElem.innerText = `Voice: ${remaining}/${VOICE_LIMIT}`;
       if (remaining === 0) {
-        document.getElementById("limit-banner").style.display = "block";
+        capsule.classList.add("alert");
+      } else {
+        capsule.classList.remove("alert");
       }
     }
 
-    function speakText(text) {
-      if (voiceCount >= VOICE_LIMIT) {
-        alert("Daily voice limit reached. Upgrade to Pro for unlimited native audio!");
+    function handleLanguageChange() {
+      const selLang = document.getElementById("targetLanguage").value;
+      appendAIMessage(`Language set to **${selLang}**. Speak or write to practice with YOKAZ AI.`);
+    }
+
+    // ==========================================
+    // 2. TEXT-TO-SPEECH (TTS) ENGINE
+    // ==========================================
+    function playSpeech(buttonElem, text) {
+      if (voiceUsage >= VOICE_LIMIT) {
+        openLimitModal();
         return;
       }
 
-      window.speechSynthesis.cancel(); // Stop any pending speech
+      window.speechSynthesis.cancel();
+
+      const selLang = document.getElementById("targetLanguage").value;
       const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = LANG_CODES[selLang] || "en-US";
       utterance.rate = 0.92;
+
+      buttonElem.classList.add("playing");
+
+      utterance.onend = () => {
+        buttonElem.classList.remove("playing");
+      };
+
+      utterance.onerror = () => {
+        buttonElem.classList.remove("playing");
+      };
+
       window.speechSynthesis.speak(utterance);
 
-      voiceCount++;
-      localStorage.setItem("dailyVoiceCount", voiceCount);
-      updateBadge();
+      voiceUsage++;
+      localStorage.setItem("dailyVoiceCount", voiceUsage);
+      updateQuotaUI();
     }
 
-    async function sendMessage() {
+    // ==========================================
+    // 3. SPEECH RECOGNITION (MIC INPUT)
+    // ==========================================
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Your browser does not support voice input. Please use Chrome or Safari.");
+        return null;
+      }
+
+      const recognizer = new SpeechRecognition();
+      recognizer.continuous = false;
+      recognizer.interimResults = false;
+
+      recognizer.onstart = () => {
+        isRecognizing = true;
+        document.getElementById("micBtn").classList.add("listening");
+      };
+
+      recognizer.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("userInput").value = transcript;
+        submitMessage();
+      };
+
+      recognizer.onerror = () => {
+        isRecognizing = false;
+        document.getElementById("micBtn").classList.remove("listening");
+      };
+
+      recognizer.onend = () => {
+        isRecognizing = false;
+        document.getElementById("micBtn").classList.remove("listening");
+      };
+
+      return recognizer;
+    }
+
+    function toggleSpeechRecognition() {
+      if (!speechRecognizer) {
+        speechRecognizer = initSpeechRecognition();
+        if (!speechRecognizer) return;
+      }
+
+      const selLang = document.getElementById("targetLanguage").value;
+      speechRecognizer.lang = LANG_CODES[selLang] || "en-US";
+
+      if (isRecognizing) {
+        speechRecognizer.stop();
+      } else {
+        speechRecognizer.start();
+      }
+    }
+
+    // ==========================================
+    // 4. MESSAGE DISPATCH & SKELETON LOADER
+    // ==========================================
+    async function submitMessage() {
       const input = document.getElementById("userInput");
       const btn = document.getElementById("sendBtn");
       const text = input.value.trim();
+
       if (!text) return;
 
-      appendMsg(text, "user");
+      appendUserMessage(text);
       input.value = "";
       btn.disabled = true;
 
-      const aiMsgDiv = appendMsg("Thinking...", "ai");
-
-      // 10-second timeout controller so it never hangs silently
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 25000);
+      const skeletonRow = appendSkeletonLoader();
+      const targetLang = document.getElementById("targetLanguage").value;
 
       try {
-        const res = await fetch(WORKER_URL, {
+        const response = await fetch(WORKER_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text, targetLanguage: "English" }),
-          signal: controller.signal
+          body: JSON.stringify({ message: text, targetLanguage: targetLang })
         });
-        clearTimeout(timeoutId);
 
-        const data = await res.json();
-        const reply = data.reply || "No response received.";
+        const data = await response.json();
+        skeletonRow.remove();
 
-        const cleanReplyForSpeech = reply.replace(/'/g, "\\'").replace(/\n/g, " ");
-        aiMsgDiv.innerHTML = `${reply}<br><button class="voice-btn" onclick="speakText('${cleanReplyForSpeech}')">🔊 Pronounce</button>`;
-        
-        // Auto-speak if quota remains
-        if (voiceCount < VOICE_LIMIT) {
-          speakText(reply);
-        }
+        const reply = data.reply || "I couldn't process that sentence. Try again!";
+        renderAIResponseCard(reply);
+
       } catch (err) {
-        clearTimeout(timeoutId);
-        aiMsgDiv.innerText = err.name === "AbortError" 
-          ? "Request timed out. Please check your Worker URL." 
-          : `Connection Error: ${err.message}`;
+        skeletonRow.remove();
+        appendAIMessage(`⚠️ Connection error. Please verify your Worker URL or internet connection.`);
       } finally {
         btn.disabled = false;
         input.focus();
       }
     }
 
-    function appendMsg(text, sender) {
-      const box = document.getElementById("chat-box");
-      const div = document.createElement("div");
-      div.className = `msg ${sender}`;
-      div.innerText = text;
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
-      return div;
+    // ==========================================
+    // 5. DOM CREATION & PARSING HELPERS
+    // ==========================================
+    function appendUserMessage(text) {
+      const chatBox = document.getElementById("chatBox");
+      const row = document.createElement("div");
+      row.className = "message-row user-row";
+      row.innerHTML = `<div class="bubble-user-card">${escapeHTML(text)}</div>`;
+      chatBox.appendChild(row);
+      scrollChatToBottom();
+    }
+
+    function renderAIResponseCard(rawText) {
+      const chatBox = document.getElementById("chatBox");
+      const row = document.createElement("div");
+      row.className = "message-row ai-row";
+
+      let correctionHTML = "";
+      let cleanedText = rawText;
+
+      const correctionRegex = /(?:Correction|Correction:)\s*([^\n]+)/i;
+      const match = rawText.match(correctionRegex);
+
+      if (match) {
+        const correctionNote = match[1].trim();
+        correctionHTML = `
+          <div class="correction-badge">
+            <i class="fa-solid fa-circle-check"></i>
+            <div><strong>Correction:</strong> ${escapeHTML(correctionNote)}</div>
+          </div>
+        `;
+        cleanedText = rawText.replace(match[0], "").trim();
+      }
+
+      const escapedSpokenText = cleanedText.replace(/'/g, "\\'").replace(/\n/g, " ");
+
+      row.innerHTML = `
+        <div class="bubble-ai-card">
+          ${correctionHTML}
+          <div class="ai-text-content">${escapeHTML(cleanedText)}</div>
+          <div class="voice-action-row">
+            <button class="pronounce-btn" onclick="playSpeech(this, '${escapedSpokenText}')">
+              <div class="soundwave-bars"><span></span><span></span><span></span></div>
+              <span>Pronounce</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      chatBox.appendChild(row);
+      scrollChatToBottom();
+
+      if (voiceUsage < VOICE_LIMIT) {
+        const btn = row.querySelector(".pronounce-btn");
+        playSpeech(btn, cleanedText);
+      }
+    }
+
+    function appendAIMessage(plainText) {
+      const chatBox = document.getElementById("chatBox");
+      const row = document.createElement("div");
+      row.className = "message-row ai-row";
+      row.innerHTML = `<div class="bubble-ai-card"><div class="ai-text-content">${escapeHTML(plainText)}</div></div>`;
+      chatBox.appendChild(row);
+      scrollChatToBottom();
+    }
+
+    function appendSkeletonLoader() {
+      const chatBox = document.getElementById("chatBox");
+      const row = document.createElement("div");
+      row.className = "message-row ai-row";
+      row.innerHTML = `
+        <div class="bubble-ai-card skeleton-bubble">
+          <div class="pulse-dot"></div>
+          <div class="pulse-dot"></div>
+          <div class="pulse-dot"></div>
+        </div>
+      `;
+      chatBox.appendChild(row);
+      scrollChatToBottom();
+      return row;
+    }
+
+    function scrollChatToBottom() {
+      const chatBox = document.getElementById("chatBox");
+      chatBox.scrollTo({
+        top: chatBox.scrollHeight,
+        behavior: "smooth"
+      });
+    }
+
+    function openLimitModal() {
+      document.getElementById("limitModal").classList.add("active");
+    }
+
+    function closeLimitModal() {
+      document.getElementById("limitModal").classList.remove("active");
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
     }
 
     document.getElementById("userInput").addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
-        sendMessage();
+        submitMessage();
       }
     });
   </script>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LingoAI - Learn by Speaking</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #0f172a; color: #fff; display: flex; flex-direction: column; height: 100vh; }
+    header { padding: 15px; background: #1e293b; text-align: center; font-size: 1.1rem; font-weight: bold; }
+    #chat-box { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+    .msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 0.95rem; line-height: 1.4; }
+    .user { align-self: flex-end; background: #2563eb; color: #fff; }
+    .ai { align-self: flex-start; background: #334155; color: #f8fafc; }
+    .ai button { margin-top: 8px; background: #0ea5e9; border: none; color: white; padding: 4px 8px; border-radius: 6px; cursor: pointer; }
+    #controls { padding: 12px; background: #1e293b; display: flex; gap: 8px; align-items: center; }
+    input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: white; outline: none; }
+    button.send-btn { background: #22c55e; border: none; color: white; padding: 12px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    #limit-banner { background: #e11d48; text-align: center; padding: 8px; font-size: 0.85rem; display: none; }
+  </style>
+</head>
+<body>
+  <header>AI Language Tutor (Voice + Text)</header>
+  <div id="limit-banner">Daily free voice limit reached! Text remains unlimited.</div>
+  
+  <div id="chat-box">
+    <div class="msg ai">Hello! I am your AI language tutor. Speak or type to me to practice. What would you like to say?</div>
+  </div>
+
+  <div id="controls">
+    <input type="text" id="userInput" placeholder="Type a message in English/Spanish/etc..." />
+    <button class="send-btn" onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    // PASTE YOUR CLOUDFLARE WORKER URL HERE:
+    const WORKER_URL = "https://language-tutor-api.ashishkaji08.workers.dev/";
+
+    let voiceCount = parseInt(localStorage.getItem("dailyVoiceCount") || "0");
+    const VOICE_LIMIT = 5;
+
+    function speakText(text) {
+      if (voiceCount >= VOICE_LIMIT) {
+        document.getElementById("limit-banner").style.display = "block";
+        alert("Daily voice limit reached (5/5). Upgrade for unlimited audio.");
+        return;
+      }
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+      
+      voiceCount++;
+      localStorage.setItem("dailyVoiceCount", voiceCount);
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendMsg(text, "user");
+      input.value = "";
+
+      const aiMsgDiv = appendMsg("Thinking...", "ai");
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text, targetLanguage: "English" })
+        });
+        const data = await res.json();
+        const reply = data.reply || "Something went wrong.";
+
+        aiMsgDiv.innerHTML = `${reply}<br><button onclick="speakText('${reply.replace(/'/g, "\\'")}')">🔊 Listen (Voice)</button>`;
+        
+        // Auto-play pronunciation
+        speakText(reply);
+      } catch (err) {
+        aiMsgDiv.innerText = "Error: Check your worker URL or connection.";
+      }
+    }
+
+    function appendMsg(text, sender) {
+      const box = document.getElementById("chat-box");
+      const div = document.createElement("div");
+      div.className = `msg ${sender}`;
+      div.innerText = text;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      return div;
+    }
+
+    document.getElementById("userInput").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+</body>
+</html>

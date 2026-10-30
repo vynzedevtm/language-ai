@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
   <title>YOKAZ AI | AI Language Tutor</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -12,6 +14,7 @@
     :root {
       --bg-black: #000000;
       --glass-base: rgba(10, 10, 10, 0.7);
+      --glass-card: #0d0d0d;
       --glass-input: rgba(12, 12, 12, 0.85);
       --border-soft: rgba(255, 255, 255, 0.12);
       --border-white: rgba(255, 255, 255, 0.7);
@@ -79,7 +82,7 @@
     header {
       position: relative;
       z-index: 10;
-      padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px 16px;
+      padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px 16px;
       background: var(--glass-base);
       backdrop-filter: blur(28px) saturate(180%);
       -webkit-backdrop-filter: blur(28px) saturate(180%);
@@ -125,48 +128,55 @@
 
     .brand-slogan {
       font-size: 0.62rem;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       color: var(--text-muted);
       font-weight: 600;
       margin-top: 1px;
     }
 
-    .beta-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.62rem;
+    .profile-pill {
+      font-size: 0.64rem;
       font-weight: 600;
-      color: rgba(245, 158, 11, 0.95);
-      background: rgba(245, 158, 11, 0.08);
-      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
       padding: 2px 7px;
       border-radius: 999px;
       margin-top: 3px;
       width: fit-content;
-      letter-spacing: 0.02em;
-    }
-
-    .beta-badge .beta-dot {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--beta-gold);
-      box-shadow: 0 0 6px var(--beta-gold);
+      cursor: pointer;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+    }
+
+    /* Goal & Streak tracker */
+    .tracker-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-soft);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .tracker-pill .streak {
+      color: #f97316;
     }
 
     .header-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border-soft);
@@ -178,16 +188,27 @@
     }
 
     .header-btn svg {
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
       fill: currentColor;
     }
 
     .header-btn:hover {
       background: rgba(255, 255, 255, 0.12);
       border-color: var(--border-white);
-      box-shadow: var(--white-glow-soft);
       transform: translateY(-1px);
+    }
+
+    #installAppBtn {
+      display: none;
+      background: #ffffff;
+      color: #000000;
+      font-weight: 700;
+      border: none;
+      padding: 5px 11px;
+      font-size: 0.7rem;
+      border-radius: 999px;
+      cursor: pointer;
     }
 
     #chat-box {
@@ -270,36 +291,7 @@
       font-weight: 700;
     }
 
-    /* Balanced Starter Chips */
-    .starters-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .starter-chip {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border-soft);
-      padding: 7px 13px;
-      border-radius: 999px;
-      color: #e4e4e7;
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      user-select: none;
-    }
-
-    .starter-chip:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: #ffffff;
-      color: #ffffff;
-      box-shadow: var(--white-glow-soft);
-      transform: translateY(-1px);
-    }
-
-    /* Grammar Correction with Expandable Drawer */
+    /* Grammar Correction Box */
     .correction-box {
       margin-bottom: 8px;
       padding: 8px 12px;
@@ -332,11 +324,6 @@
       font-weight: 700;
       cursor: pointer;
       outline: none;
-      transition: 0.15s;
-    }
-
-    .why-toggle:hover {
-      background: rgba(245, 158, 11, 0.25);
     }
 
     .why-content {
@@ -353,7 +340,6 @@
       display: block;
     }
 
-    /* Manual Click-Only Speak Button */
     .speak-btn {
       margin-top: 12px;
       align-self: flex-start;
@@ -367,7 +353,6 @@
       border-radius: 999px;
       font-size: 0.74rem;
       font-weight: 600;
-      letter-spacing: 0.03em;
       cursor: pointer;
       outline: none;
       transition: all 0.2s ease;
@@ -377,14 +362,6 @@
       width: 12px;
       height: 12px;
       fill: currentColor;
-    }
-
-    .speak-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: #ffffff;
-      color: #ffffff;
-      box-shadow: var(--white-glow-soft);
-      transform: translateY(-1px);
     }
 
     .speak-btn.playing {
@@ -480,20 +457,11 @@
       color: #a1a1aa;
     }
 
-    .mic-btn:hover {
-      color: #ffffff;
-    }
-
     .mic-btn.recording {
       background: #ef4444;
       color: #ffffff;
       box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
       animation: pulseMic 1.2s infinite;
-    }
-
-    @keyframes pulseMic {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
     }
 
     .send-btn {
@@ -502,17 +470,89 @@
       box-shadow: var(--white-glow-soft);
     }
 
-    .send-btn:hover {
-      transform: scale(1.04);
-      box-shadow: var(--white-glow-strong);
-    }
-
     .send-btn:disabled {
       background: #27272a;
       color: #52525b;
       cursor: not-allowed;
-      box-shadow: none;
-      transform: none;
+    }
+
+    /* Modal Questionnaire Styling */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .onboard-card {
+      background: var(--glass-card);
+      border: 1px solid var(--border-white);
+      box-shadow: var(--white-glow-strong);
+      padding: 24px;
+      border-radius: 24px;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .onboard-step {
+      display: none;
+    }
+
+    .onboard-step.active {
+      display: block;
+    }
+
+    .onboard-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 6px;
+    }
+
+    .onboard-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .option-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-soft);
+      padding: 12px;
+      border-radius: 14px;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .option-btn:hover, .option-btn.selected {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+      box-shadow: var(--white-glow-soft);
     }
   </style>
 </head>
@@ -529,25 +569,29 @@
         <div class="brand-title"><span></span>YOKAZ AI</div>
       </div>
       <div class="brand-slogan">JUST SPEAK WITH YOKAZ AI</div>
-      <div class="beta-badge">
-        <span class="beta-dot"></span>
-        Beta Version • AI may make mistakes
+      <div class="profile-pill" id="profileBadge" onclick="openOnboarding(true)">
+        English • Basic
       </div>
     </div>
     
     <div class="header-actions">
-      <!-- Clear Canvas Button -->
+      <!-- Install PWA Button -->
+      <button id="installAppBtn" onclick="installPWA()">Install</button>
+
+      <!-- Daily Tracker Pill -->
+      <div class="tracker-pill" title="Daily Goal & Streak">
+        <span class="streak" id="streakText">🔥 1</span>
+        <span id="goalCount">0/10</span>
+      </div>
+
+      <!-- Clear Canvas -->
       <button class="header-btn" onclick="clearConversation()" title="Clear Chat">
-        <svg viewBox="0 0 24 24">
-          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-        </svg>
+        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
       </button>
 
       <!-- Instagram Link -->
       <a href="https://www.instagram.com/vynzedev" target="_blank" rel="noopener noreferrer" class="header-btn" title="Instagram">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-        </svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       </a>
     </div>
   </header>
@@ -555,15 +599,7 @@
   <main id="chat-box">
     <div class="msg-wrapper ai" id="welcomeMsg">
       <div class="msg-bubble">
-        <p>Welcome to <strong>YOKAZ AI</strong>. Talk or type to me in any language (English, Hindi, Hinglish, Spanish, Malayalam, etc.), or tap a topic to start:</p>
-        
-        <!-- Starter Chips -->
-        <div class="starters-grid">
-          <button class="starter-chip" onclick="quickSend('I want to practice spoken English')">🗣️ Practice English</button>
-          <button class="starter-chip" onclick="quickSend('Mujhe English sikhna hai, help karo')">🇮🇳 Hindi / Hinglish</button>
-          <button class="starter-chip" onclick="quickSend('Practice ordering food at a cafe')">☕ Cafe Scenario</button>
-          <button class="starter-chip" onclick="quickSend('Help me prepare for a job interview')">💼 Job Interview</button>
-        </div>
+        <p>Welcome to <strong>YOKAZ AI</strong>. Tap the profile badge above anytime to change your target language or learning goal. Let's begin!</p>
       </div>
     </div>
   </main>
@@ -575,7 +611,7 @@
           <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/>
         </svg>
       </button>
-      <input type="text" id="userInput" placeholder="Speak or type in any language..." autocomplete="off">
+      <input type="text" id="userInput" placeholder="Speak or type to practice..." autocomplete="off">
       <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send">
         <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24">
           <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
@@ -584,13 +620,170 @@
     </div>
   </footer>
 
+  <!-- 3-STEP ONBOARDING QUESTIONNAIRE MODAL -->
+  <div class="modal-overlay" id="onboardModal">
+    <div class="onboard-card">
+      
+      <!-- STEP 1: LANGUAGE -->
+      <div class="onboard-step active" id="step1">
+        <h3>Step 1: Choose Language</h3>
+        <p>Which language do you want to learn or practice?</p>
+        <div class="options-grid">
+          <button class="option-btn" onclick="selectLanguage('English')">🇬🇧 English</button>
+          <button class="option-btn" onclick="selectLanguage('German')">🇩🇪 German</button>
+          <button class="option-btn" onclick="selectLanguage('Hindi')">🇮🇳 Hindi</button>
+          <button class="option-btn" onclick="selectLanguage('Spanish')">🇪🇸 Spanish</button>
+          <button class="option-btn" onclick="selectLanguage('French')">🇫🇷 French</button>
+          <button class="option-btn" onclick="selectLanguage('Malayalam')">🌴 Malayalam</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: LEVEL -->
+      <div class="onboard-step" id="step2">
+        <h3>Step 2: Your Level</h3>
+        <p>What is your current comfort level?</p>
+        <div class="options-grid" style="grid-template-columns: 1fr;">
+          <button class="option-btn" onclick="selectLevel('Beginner')">🌱 Basic / Beginner (A1-A2)</button>
+          <button class="option-btn" onclick="selectLevel('Intermediate')">⚡ Medium / Intermediate (B1-B2)</button>
+          <button class="option-btn" onclick="selectLevel('Advanced')">🚀 Pro / Advanced (C1-C2)</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: GOAL -->
+      <div class="onboard-step" id="step3">
+        <h3>Step 3: Primary Goal</h3>
+        <p>What do you want to focus on most?</p>
+        <div class="options-grid" style="grid-template-columns: 1fr;">
+          <button class="option-btn" onclick="selectGoal('Spoken Fluency')">🗣️ Spoken Fluency & Conversation</button>
+          <button class="option-btn" onclick="selectGoal('Grammar Accuracy')">✍️ Grammar & Vocabulary Accuracy</button>
+          <button class="option-btn" onclick="selectGoal('Professional Career')">💼 Job Interviews & Professional</button>
+          <button class="option-btn" onclick="selectGoal('Casual Daily Chat')">☕ Casual Daily Chatting</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script>
     const WORKER_URL = "https://language-tutor-api.ashishkaji08.workers.dev/";
+    const DAILY_TARGET = 10;
 
-    // Sliding Multi-Turn Memory Array
+    // Service Worker Registration for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+
+    // PWA Install Prompt Handler
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBtn = document.getElementById("installAppBtn");
+      if (installBtn) installBtn.style.display = "block";
+    });
+
+    function installPWA() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        document.getElementById("installAppBtn").style.display = "none";
+      });
+    }
+
+    // Profile & Questionnaire State
+    let userProfile = JSON.parse(localStorage.getItem("yokaz_profile")) || null;
+    let tempLang = "English", tempLevel = "Beginner";
+
+    function checkOnboarding() {
+      if (!userProfile) {
+        openOnboarding();
+      } else {
+        updateProfileUI();
+      }
+    }
+
+    function openOnboarding(force = false) {
+      document.getElementById("onboardModal").classList.add("active");
+      showStep(1);
+    }
+
+    function showStep(stepNum) {
+      document.getElementById("step1").classList.remove("active");
+      document.getElementById("step2").classList.remove("active");
+      document.getElementById("step3").classList.remove("active");
+      document.getElementById(`step${stepNum}`).classList.add("active");
+    }
+
+    function selectLanguage(lang) {
+      tempLang = lang;
+      showStep(2);
+    }
+
+    function selectLevel(level) {
+      tempLevel = level;
+      showStep(3);
+    }
+
+    function selectGoal(goal) {
+      userProfile = {
+        targetLanguage: tempLang,
+        level: tempLevel,
+        goal: goal
+      };
+      localStorage.setItem("yokaz_profile", JSON.stringify(userProfile));
+      document.getElementById("onboardModal").classList.remove("active");
+      updateProfileUI();
+
+      // Trigger automatic customized starter greeting
+      clearConversation();
+      appendMessage(`Let's start my ${userProfile.targetLanguage} practice (${userProfile.level} level for ${userProfile.goal}).`, "user");
+      sendMessage(`Hi! I want to start practicing ${userProfile.targetLanguage} at a ${userProfile.level} level focusing on ${userProfile.goal}. Give me a great starter scenario!`, true);
+    }
+
+    function updateProfileUI() {
+      if (!userProfile) return;
+      document.getElementById("profileBadge").innerText = `${userProfile.targetLanguage} • ${userProfile.level}`;
+    }
+
+    // Daily Practice & Streak Routine
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const lastActiveDate = localStorage.getItem("yokaz_last_date");
+    let dailyCount = parseInt(localStorage.getItem("yokaz_daily_count") || "0");
+    let streakCount = parseInt(localStorage.getItem("yokaz_streak") || "1");
+
+    if (lastActiveDate !== todayStr) {
+      if (lastActiveDate) {
+        const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+        if (lastActiveDate === yesterday) {
+          streakCount++;
+        } else {
+          streakCount = 1;
+        }
+      }
+      dailyCount = 0;
+      localStorage.setItem("yokaz_streak", streakCount);
+      localStorage.setItem("yokaz_last_date", todayStr);
+      localStorage.setItem("yokaz_daily_count", "0");
+    }
+
+    function incrementPracticeGoal() {
+      dailyCount++;
+      localStorage.setItem("yokaz_daily_count", dailyCount);
+      updateTrackerUI();
+    }
+
+    function updateTrackerUI() {
+      document.getElementById("goalCount").innerText = `${dailyCount}/${DAILY_TARGET}`;
+      document.getElementById("streakText").innerText = `🔥 ${streakCount}`;
+    }
+
+    updateTrackerUI();
+    checkOnboarding();
+
+    // Sliding Memory
     let conversationHistory = [];
 
-    // Clear / Reset Canvas
     function clearConversation() {
       conversationHistory = [];
       const chatBox = document.getElementById("chat-box");
@@ -599,25 +792,7 @@
       if (welcome) chatBox.appendChild(welcome);
     }
 
-    // Quick Starter Action
-    function quickSend(promptText) {
-      document.getElementById("userInput").value = promptText;
-      sendMessage();
-    }
-
-    // Audio Unlock for Mobile Browsers
-    let audioUnlocked = false;
-    window.addEventListener("click", unlockAudioSilently, { once: true });
-    window.addEventListener("touchstart", unlockAudioSilently, { once: true });
-
-    function unlockAudioSilently() {
-      if (audioUnlocked || !('speechSynthesis' in window)) return;
-      const blankUtterance = new SpeechSynthesisUtterance('');
-      window.speechSynthesis.speak(blankUtterance);
-      audioUnlocked = true;
-    }
-
-    // Script-To-Voice Detection
+    // Speech synthesis
     function detectVoiceLang(text) {
       if (/[\u0D00-\u0D7F]/.test(text)) return 'ml-IN';
       if (/[\u0900-\u097F]/.test(text)) return 'hi-IN';
@@ -626,7 +801,7 @@
       if (/[\u0C80-\u0CFF]/.test(text)) return 'kn-IN';
       if (/[\u3040-\u30FF\u4E00-\u9FAF]/.test(text)) return 'ja-JP';
       if (/[\u0600-\u06FF]/.test(text)) return 'ar-SA';
-      return 'en-IN'; // Indian-English phonetics
+      return 'en-IN';
     }
 
     let availableVoices = [];
@@ -636,13 +811,11 @@
       };
     }
 
-    // Unlimited Manual Voice Playback
     function speakReply(text, btnElement = null) {
       if (!('speechSynthesis' in window)) {
         alert("Text-to-speech is not supported on this browser.");
         return;
       }
-
       window.speechSynthesis.cancel();
 
       const cleanText = text.replace(/Correction:\s*([^\n]+)/gi, '$1')
@@ -652,15 +825,10 @@
       const utterance = new SpeechSynthesisUtterance(cleanText);
       const langCode = detectVoiceLang(cleanText);
 
-      if (!availableVoices.length) {
-        availableVoices = window.speechSynthesis.getVoices();
-      }
-
+      if (!availableVoices.length) availableVoices = window.speechSynthesis.getVoices();
       const matchedVoice = availableVoices.find(v => v.lang.toLowerCase().startsWith(langCode.slice(0, 2).toLowerCase())) ||
                            availableVoices.find(v => v.lang.toLowerCase().startsWith('en'));
-      if (matchedVoice) {
-        utterance.voice = matchedVoice;
-      }
+      if (matchedVoice) utterance.voice = matchedVoice;
       utterance.lang = langCode;
       utterance.rate = 0.95;
 
@@ -668,20 +836,10 @@
 
       if (btnElement) {
         btnElement.classList.add("playing");
-        btnElement.innerHTML = `
-          <div class="soundwave"><span></span><span></span><span></span></div>
-          Speaking...
-        `;
+        btnElement.innerHTML = `<div class="soundwave"><span></span><span></span><span></span></div> Speaking...`;
       }
 
-      utterance.onend = () => {
-        if (btnElement) {
-          btnElement.classList.remove("playing");
-          btnElement.innerHTML = `${speakerIcon} Speak`;
-        }
-      };
-
-      utterance.onerror = () => {
+      utterance.onend = utterance.onerror = () => {
         if (btnElement) {
           btnElement.classList.remove("playing");
           btnElement.innerHTML = `${speakerIcon} Speak`;
@@ -691,7 +849,7 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    // STT (Voice Input)
+    // Voice recognition
     let recognition = null;
     let isRecording = false;
 
@@ -717,17 +875,13 @@
         alert("Speech-to-text is not supported on this browser.");
         return;
       }
-
       const micBtn = document.getElementById("micBtn");
-
       if (!isRecording) {
         try {
           recognition.start();
           isRecording = true;
           micBtn.classList.add("recording");
-        } catch (e) {
-          console.error(e);
-        }
+        } catch (e) {}
       } else {
         recognition.stop();
         isRecording = false;
@@ -735,22 +889,24 @@
       }
     }
 
-    // Chat Engine
-    async function sendMessage() {
+    // Chat execution
+    async function sendMessage(customPrompt = null, isAuto = false) {
       const input = document.getElementById("userInput");
       const sendBtn = document.getElementById("sendBtn");
-      const text = input.value.trim();
+      const text = customPrompt || input.value.trim();
 
       if (!text) return;
 
-      appendMessage(text, "user");
+      if (!customPrompt && !isAuto) {
+        appendMessage(text, "user");
+      }
       input.value = "";
       sendBtn.disabled = true;
 
+      incrementPracticeGoal();
       conversationHistory.push({ role: "user", content: text });
 
       const aiMsgObj = appendMessage("Thinking...", "ai");
-
       const controller = new AbortController();
       const timeoutTimer = setTimeout(() => controller.abort(), 20000);
 
@@ -760,7 +916,8 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 
             message: text,
-            history: conversationHistory.slice(-6) 
+            history: conversationHistory.slice(-6),
+            profile: userProfile
           }),
           signal: controller.signal
         });
@@ -770,7 +927,6 @@
         const reply = data.reply || "Sorry, the server is busy.";
 
         conversationHistory.push({ role: "assistant", content: reply });
-
         renderAiMessage(aiMsgObj, reply);
 
       } catch (err) {
@@ -818,7 +974,6 @@
         conversationalReply = conversationalReply.replace(explMatch[0], "").trim();
       }
 
-      // 1. Sleek Correction Box with Expandable "Why?"
       if (correctionText) {
         const correctionDiv = document.createElement("div");
         correctionDiv.className = "correction-box";
@@ -851,7 +1006,6 @@
         msgObj.bubble.appendChild(correctionDiv);
       }
 
-      // 2. Open Canvas Layout
       const targetText = conversationalReply || (!correctionText ? fullText : "");
       if (targetText) {
         const paragraphs = targetText.split(/\n+/).filter(p => p.trim().length > 0);
@@ -862,7 +1016,6 @@
         });
       }
 
-      // 3. Floating Speak Pill (Manual trigger only)
       const speakBtn = document.createElement("button");
       speakBtn.className = "speak-btn";
       speakBtn.innerHTML = `

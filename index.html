@@ -161,7 +161,7 @@
       gap: 10px;
     }
 
-    .insta-link {
+    .header-btn {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -172,49 +172,22 @@
       border: 1px solid var(--border-soft);
       color: #ffffff;
       text-decoration: none;
+      cursor: pointer;
       transition: all 0.2s ease;
       flex-shrink: 0;
     }
 
-    .insta-link svg {
-      width: 17px;
-      height: 17px;
+    .header-btn svg {
+      width: 16px;
+      height: 16px;
       fill: currentColor;
     }
 
-    .insta-link:hover {
+    .header-btn:hover {
       background: rgba(255, 255, 255, 0.12);
       border-color: var(--border-white);
       box-shadow: var(--white-glow-soft);
       transform: translateY(-1px);
-    }
-
-    .quota-badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-soft);
-      padding: 6px 12px;
-      border-radius: 999px;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-    }
-
-    .quota-badge .dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 8px #22c55e;
-    }
-
-    .quota-badge.depleted .dot {
-      background: #ef4444;
-      box-shadow: 0 0 8px #ef4444;
     }
 
     #chat-box {
@@ -273,16 +246,12 @@
       line-height: 1.5;
     }
 
-    /* Unboxed AI text styling */
     .ai .msg-bubble {
       background: transparent;
       border: none;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
       color: #f4f4f5;
       padding: 4px 0 4px 14px;
       border-left: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 0;
       font-size: 1rem;
       line-height: 1.68;
       letter-spacing: 0.01em;
@@ -301,19 +270,90 @@
       font-weight: 700;
     }
 
+    /* Topic Starter Chips */
+    .starters-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .starter-chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-soft);
+      padding: 7px 13px;
+      border-radius: 999px;
+      color: #e4e4e7;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .starter-chip:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #ffffff;
+      color: #ffffff;
+      box-shadow: var(--white-glow-soft);
+      transform: translateY(-1px);
+    }
+
+    /* Grammar Correction & Expandable Drawer */
     .correction-box {
-      margin-bottom: 10px;
-      padding: 6px 12px;
+      margin-bottom: 8px;
+      padding: 8px 12px;
       background: rgba(245, 158, 11, 0.08);
       border: 1px solid rgba(245, 158, 11, 0.25);
-      border-radius: 8px;
-      font-size: 0.85rem;
+      border-radius: 10px;
+      font-size: 0.86rem;
       color: #fbbf24;
       line-height: 1.45;
-      display: inline-block;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 6px;
       max-width: 100%;
     }
 
+    .correction-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .why-toggle {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fde68a;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      transition: 0.15s;
+    }
+
+    .why-toggle:hover {
+      background: rgba(245, 158, 11, 0.25);
+    }
+
+    .why-content {
+      display: none;
+      font-size: 0.8rem;
+      color: #e2e8f0;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 6px 10px;
+      border-radius: 6px;
+      border-left: 2px solid #fbbf24;
+    }
+
+    .why-content.open {
+      display: block;
+    }
+
+    /* Speak Button */
     .speak-btn {
       margin-top: 12px;
       align-self: flex-start;
@@ -474,63 +514,6 @@
       box-shadow: none;
       transform: none;
     }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal-card {
-      background: #0a0a0a;
-      border: 1px solid var(--border-white);
-      box-shadow: var(--white-glow-strong);
-      padding: 28px 24px;
-      border-radius: 24px;
-      max-width: 360px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .modal-card h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.25rem;
-      margin-bottom: 8px;
-    }
-
-    .modal-card p {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-
-    .modal-close-btn {
-      width: 100%;
-      padding: 12px;
-      border-radius: 999px;
-      background: #ffffff;
-      color: #000000;
-      border: none;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
-    }
   </style>
 </head>
 <body>
@@ -553,23 +536,34 @@
     </div>
     
     <div class="header-actions">
-      <a href="https://www.instagram.com/vynzedev" target="_blank" rel="noopener noreferrer" class="insta-link" title="Instagram">
+      <!-- Clear / Reset Chat Canvas -->
+      <button class="header-btn" onclick="clearConversation()" title="Clear Chat">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+        </svg>
+      </button>
+
+      <!-- Instagram Link -->
+      <a href="https://www.instagram.com/vynzedev" target="_blank" rel="noopener noreferrer" class="header-btn" title="Instagram">
         <svg viewBox="0 0 24 24">
           <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
         </svg>
       </a>
-
-      <div class="quota-badge" id="quotaBadge">
-        <span class="dot"></span>
-        <span id="quotaText">Voice: 5/5</span>
-      </div>
     </div>
   </header>
 
   <main id="chat-box">
-    <div class="msg-wrapper ai">
+    <div class="msg-wrapper ai" id="welcomeMsg">
       <div class="msg-bubble">
-        <p>Welcome to <strong>YOKAZ AI</strong>. Talk or type to me in any language (English, Manglish, Malayalam, Hindi, Hinglish, Spanish, etc.), or tell me what language you want to learn!</p>
+        <p>Welcome to <strong>YOKAZ AI</strong>. Talk or type to me in any language (English, Manglish, Malayalam, Hindi, Hinglish, Spanish, etc.), or pick a scenario to start practicing:</p>
+        
+        <!-- Quick Starter Chips -->
+        <div class="starters-grid">
+          <button class="starter-chip" onclick="quickSend('Practice ordering food at a restaurant')">🍔 Order Food</button>
+          <button class="starter-chip" onclick="quickSend('Help me practice an English job interview')">💼 Job Interview</button>
+          <button class="starter-chip" onclick="quickSend('German padikkanam, basic conversation thudangam')">🇩🇪 Learn German</button>
+          <button class="starter-chip" onclick="quickSend('Casual Manglish samsarikkaam, entha vishesham?')">🌴 Manglish Chat</button>
+        </div>
       </div>
     </div>
   </main>
@@ -590,30 +584,28 @@
     </div>
   </footer>
 
-  <div class="modal-overlay" id="limitModal">
-    <div class="modal-card">
-      <h3>Audio Limit Reached</h3>
-      <p>You have used your 5 free audio responses for today. Unlimited text chat remains free forever. Voice quota resets tonight at midnight.</p>
-      <button class="modal-close-btn" onclick="closeLimitModal()">Continue Text Chat</button>
-    </div>
-  </div>
-
   <script>
     const WORKER_URL = "https://language-tutor-api.ashishkaji08.workers.dev/";
-    const VOICE_LIMIT = 5;
 
-    // Daily Midnight Auto-Reset Routine
-    const today = new Date().toISOString().slice(0, 10);
-    const savedDate = localStorage.getItem("yokaz_voice_date");
+    // Sliding Multi-Turn Memory Array
+    let conversationHistory = [];
 
-    if (savedDate !== today) {
-      localStorage.setItem("yokaz_voice_date", today);
-      localStorage.setItem("yokaz_voice_count", "0");
+    // Clear / Reset Canvas
+    function clearConversation() {
+      conversationHistory = [];
+      const chatBox = document.getElementById("chat-box");
+      const welcome = document.getElementById("welcomeMsg");
+      chatBox.innerHTML = "";
+      if (welcome) chatBox.appendChild(welcome);
     }
 
-    let voiceCount = parseInt(localStorage.getItem("yokaz_voice_count") || "0");
-    updateVoiceUI();
+    // Quick Starter Action
+    function quickSend(promptText) {
+      document.getElementById("userInput").value = promptText;
+      sendMessage();
+    }
 
+    // Silent Audio Unlock for Mobile Browsers
     let audioUnlocked = false;
     window.addEventListener("click", unlockAudioSilently, { once: true });
     window.addEventListener("touchstart", unlockAudioSilently, { once: true });
@@ -625,23 +617,6 @@
       audioUnlocked = true;
     }
 
-    function updateVoiceUI() {
-      const remaining = Math.max(0, VOICE_LIMIT - voiceCount);
-      const textEl = document.getElementById("quotaText");
-      const badgeEl = document.getElementById("quotaBadge");
-      
-      textEl.innerText = `Voice: ${remaining}/${VOICE_LIMIT}`;
-      if (remaining === 0) {
-        badgeEl.classList.add("depleted");
-      } else {
-        badgeEl.classList.remove("depleted");
-      }
-    }
-
-    function closeLimitModal() {
-      document.getElementById("limitModal").classList.remove("active");
-    }
-
     // Dynamic Script-To-Voice Detection
     function detectVoiceLang(text) {
       if (/[\u0D00-\u0D7F]/.test(text)) return 'ml-IN';
@@ -651,7 +626,7 @@
       if (/[\u0C80-\u0CFF]/.test(text)) return 'kn-IN';
       if (/[\u3040-\u30FF\u4E00-\u9FAF]/.test(text)) return 'ja-JP';
       if (/[\u0600-\u06FF]/.test(text)) return 'ar-SA';
-      return 'en-IN'; // Indian-English phonetics for Manglish/Hinglish/English
+      return 'en-IN'; // Indian-English accent
     }
 
     let availableVoices = [];
@@ -661,20 +636,19 @@
       };
     }
 
+    // Unlimited Manual Voice Playback
     function speakReply(text, btnElement = null) {
       if (!('speechSynthesis' in window)) {
         alert("Text-to-speech is not supported on this browser.");
         return;
       }
 
-      if (voiceCount >= VOICE_LIMIT) {
-        document.getElementById("limitModal").classList.add("active");
-        return;
-      }
-
       window.speechSynthesis.cancel();
 
-      const cleanText = text.replace(/Correction:\s*([^\n]+)/gi, '$1').trim() || text;
+      const cleanText = text.replace(/Correction:\s*([^\n]+)/gi, '$1')
+                            .replace(/Explanation:\s*([^\n]+)/gi, '')
+                            .trim() || text;
+
       const utterance = new SpeechSynthesisUtterance(cleanText);
       const langCode = detectVoiceLang(cleanText);
 
@@ -715,13 +689,9 @@
       };
 
       window.speechSynthesis.speak(utterance);
-
-      voiceCount++;
-      localStorage.setItem("yokaz_voice_count", voiceCount);
-      updateVoiceUI();
     }
 
-    // STT
+    // STT (Voice Input)
     let recognition = null;
     let isRecording = false;
 
@@ -765,7 +735,7 @@
       }
     }
 
-    // Chat Engine with Error Shield
+    // Chat Engine
     async function sendMessage() {
       const input = document.getElementById("userInput");
       const sendBtn = document.getElementById("sendBtn");
@@ -777,6 +747,9 @@
       input.value = "";
       sendBtn.disabled = true;
 
+      // Add user prompt to sliding history
+      conversationHistory.push({ role: "user", content: text });
+
       const aiMsgObj = appendMessage("Thinking...", "ai");
 
       const controller = new AbortController();
@@ -786,7 +759,10 @@
         const response = await fetch(WORKER_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text }),
+          body: JSON.stringify({ 
+            message: text,
+            history: conversationHistory.slice(-6) 
+          }),
           signal: controller.signal
         });
         clearTimeout(timeoutTimer);
@@ -794,11 +770,13 @@
         const data = await response.json();
         const reply = data.reply || "Sorry, the server is busy.";
 
+        // Store assistant reply in sliding history
+        conversationHistory.push({ role: "assistant", content: reply });
+
         renderAiMessage(aiMsgObj, reply);
 
       } catch (err) {
         clearTimeout(timeoutTimer);
-        // Clean error shield: never expose technical errors or network issues to user
         aiMsgObj.bubble.innerText = "Sorry, the server is busy.";
       } finally {
         sendBtn.disabled = false;
@@ -826,40 +804,67 @@
       msgObj.bubble.innerHTML = "";
 
       let correctionText = "";
+      let explanationText = "";
       let conversationalReply = fullText;
 
-      const match = fullText.match(/^(?:Correction|Fix):\s*([^\n\r]+)/i);
+      const corrMatch = fullText.match(/^Correction:\s*([^\n\r]+)/im);
+      const explMatch = fullText.match(/^Explanation:\s*([^\n\r]+)/im);
 
-      if (match) {
-        correctionText = match[1].trim();
-        conversationalReply = fullText.replace(match[0], "").trim();
+      if (corrMatch) {
+        correctionText = corrMatch[1].trim();
+        conversationalReply = conversationalReply.replace(corrMatch[0], "").trim();
       }
 
-      // 1. Sleek Correction Badge
+      if (explMatch) {
+        explanationText = explMatch[1].trim();
+        conversationalReply = conversationalReply.replace(explMatch[0], "").trim();
+      }
+
+      // 1. Sleek Correction Box with Expandable "Why?"
       if (correctionText) {
         const correctionDiv = document.createElement("div");
         correctionDiv.className = "correction-box";
-        correctionDiv.innerHTML = `<strong>Correction:</strong> ${correctionText}`;
+
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "correction-header";
+        headerDiv.innerHTML = `<span><strong>Correction:</strong> ${correctionText}</span>`;
+
+        if (explanationText) {
+          const whyBtn = document.createElement("button");
+          whyBtn.className = "why-toggle";
+          whyBtn.innerText = "Why?";
+
+          const whyBody = document.createElement("div");
+          whyBody.className = "why-content";
+          whyBody.innerText = explanationText;
+
+          whyBtn.onclick = () => {
+            const isOpen = whyBody.classList.toggle("open");
+            whyBtn.innerText = isOpen ? "Hide" : "Why?";
+          };
+
+          headerDiv.appendChild(whyBtn);
+          correctionDiv.appendChild(headerDiv);
+          correctionDiv.appendChild(whyBody);
+        } else {
+          correctionDiv.appendChild(headerDiv);
+        }
+
         msgObj.bubble.appendChild(correctionDiv);
       }
 
-      // 2. Open Canvas Layout (No Clunky Outer Box)
+      // 2. Unboxed Open Paragraphs
       const targetText = conversationalReply || (!correctionText ? fullText : "");
-      if (targetText && targetText !== correctionText) {
+      if (targetText) {
         const paragraphs = targetText.split(/\n+/).filter(p => p.trim().length > 0);
-        
         paragraphs.forEach(para => {
           const p = document.createElement("p");
           p.innerHTML = para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
           msgObj.bubble.appendChild(p);
         });
-      } else if (!correctionText) {
-        const p = document.createElement("p");
-        p.innerText = fullText;
-        msgObj.bubble.appendChild(p);
       }
 
-      // 3. Floating Speak Pill
+      // 3. Floating Speak Pill (Manual click only - no auto play)
       const speakBtn = document.createElement("button");
       speakBtn.className = "speak-btn";
       speakBtn.innerHTML = `

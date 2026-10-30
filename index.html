@@ -765,7 +765,7 @@
       }
     }
 
-    // Chat
+    // Chat Engine with Error Shield
     async function sendMessage() {
       const input = document.getElementById("userInput");
       const sendBtn = document.getElementById("sendBtn");
@@ -780,7 +780,7 @@
       const aiMsgObj = appendMessage("Thinking...", "ai");
 
       const controller = new AbortController();
-      const timeoutTimer = setTimeout(() => controller.abort(), 25000);
+      const timeoutTimer = setTimeout(() => controller.abort(), 20000);
 
       try {
         const response = await fetch(WORKER_URL, {
@@ -792,16 +792,14 @@
         clearTimeout(timeoutTimer);
 
         const data = await response.json();
-        const reply = data.reply || "No response received.";
+        const reply = data.reply || "Sorry, the server is busy.";
 
         renderAiMessage(aiMsgObj, reply);
 
       } catch (err) {
         clearTimeout(timeoutTimer);
-        const errorText = err.name === "AbortError" 
-          ? "Request timed out. Please check your worker status." 
-          : `Network Error: ${err.message}`;
-        aiMsgObj.bubble.innerText = errorText;
+        // Clean error shield: never expose technical errors or network issues to user
+        aiMsgObj.bubble.innerText = "Sorry, the server is busy.";
       } finally {
         sendBtn.disabled = false;
         input.focus();

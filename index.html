@@ -473,7 +473,7 @@
       cursor: not-allowed;
     }
 
-    /* Modal Questionnaire Styling */
+    /* Modal Styling */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -527,7 +527,6 @@
       margin-bottom: 14px;
     }
 
-    /* Search & Custom Language Input */
     .lang-search-box {
       width: 100%;
       background: rgba(255, 255, 255, 0.05);
@@ -641,6 +640,11 @@
         <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
       </button>
 
+      <!-- Delete All User Data -->
+      <button class="header-btn" onclick="deleteAllUserData()" title="Delete All Data & Reset">
+        <svg viewBox="0 0 24 24"><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
+      </button>
+
       <!-- Instagram Link -->
       <a href="https://www.instagram.com/vynzedev" target="_blank" rel="noopener noreferrer" class="header-btn" title="Instagram">
         <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -681,7 +685,6 @@
         <h3>Choose Language</h3>
         <p>Select or type any language in the world:</p>
         
-        <!-- Custom Language Direct Input -->
         <div class="custom-lang-wrap">
           <input type="text" id="customLangInput" class="custom-lang-input" placeholder="Type any language (e.g. Dutch, Tagalog)...">
           <button class="custom-lang-btn" onclick="submitCustomLanguage()">Set</button>
@@ -783,6 +786,7 @@
 
     let userProfile = JSON.parse(localStorage.getItem("yokaz_profile")) || null;
     let tempLang = "English", tempFlag = "🇬🇧", tempLevel = "Beginner";
+    let isAdminActive = false;
 
     function checkOnboarding() {
       if (!userProfile) {
@@ -848,7 +852,30 @@
     function updateProfileUI() {
       if (!userProfile) return;
       const flag = userProfile.flag || flagMap[userProfile.targetLanguage] || '🌐';
-      document.getElementById("headerLangText").innerText = `${flag} ${userProfile.targetLanguage} • ${userProfile.level}`;
+      const badge = document.getElementById("headerLangText");
+      if (badge && !isAdminActive) {
+        badge.innerText = `${flag} ${userProfile.targetLanguage} • ${userProfile.level}`;
+        badge.style.color = "#ffffff";
+        badge.style.borderColor = "rgba(255, 255, 255, 0.25)";
+      }
+    }
+
+    // Delete All User Data Function
+    function deleteAllUserData() {
+      const confirmWipe = confirm("Are you sure you want to delete all saved settings, chat history, and cache?");
+      if (!confirmWipe) return;
+
+      localStorage.clear();
+      sessionStorage.clear();
+
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          names.forEach((name) => caches.delete(name));
+        });
+      }
+
+      conversationHistory = [];
+      window.location.reload();
     }
 
     checkOnboarding();
@@ -934,7 +961,7 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    // STT
+    // STT (Voice Input)
     let recognition = null;
     let isRecording = false;
 
@@ -974,7 +1001,7 @@
       }
     }
 
-    // Chat
+    // Chat Engine
     async function sendMessage(customPrompt = null, isAuto = false) {
       const input = document.getElementById("userInput");
       const sendBtn = document.getElementById("sendBtn");
@@ -1001,7 +1028,10 @@
           body: JSON.stringify({ 
             message: text,
             history: conversationHistory.slice(-6),
-            profile: userProfile
+            profile: {
+              ...userProfile,
+              isAdminSession: isAdminActive
+            }
           }),
           signal: controller.signal
         });
@@ -1009,6 +1039,19 @@
 
         const data = await response.json();
         const reply = data.reply || "Sorry, the server is busy.";
+
+        // Handle Admin state toggle
+        if (data.adminAuth === true) {
+          isAdminActive = true;
+          const badge = document.getElementById("headerLangText");
+          if (badge) {
+            badge.innerText = "⚡ ADMIN CONSOLE";
+            badge.style.color = "#ef4444";
+          }
+        } else if (data.adminAuth === false) {
+          isAdminActive = false;
+          updateProfileUI();
+        }
 
         conversationHistory.push({ role: "assistant", content: reply });
         renderAiMessage(aiMsgObj, reply);

@@ -3,28 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-  <title>YOKAZ AI | AI Language Tutor</title>
+  <title>YOKAZ AI | Companion & Language Tutor</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg-black: #030303;
-      --glass-panel: rgba(14, 14, 16, 0.75);
-      --glass-input: rgba(18, 18, 22, 0.85);
-      --glass-card: rgba(16, 16, 20, 0.95);
+      --bg-black: #020202;
+      --glass-panel: rgba(12, 12, 14, 0.78);
+      --glass-input: rgba(18, 18, 22, 0.88);
+      --glass-card: rgba(14, 14, 18, 0.96);
       --border-subtle: rgba(255, 255, 255, 0.08);
       --border-medium: rgba(255, 255, 255, 0.16);
-      --border-glow: rgba(255, 255, 255, 0.4);
-      --white-glow-soft: 0 4px 20px rgba(255, 255, 255, 0.1);
-      --white-glow-strong: 0 0 30px rgba(255, 255, 255, 0.35);
+      --border-glow: rgba(255, 255, 255, 0.45);
+      --white-glow-soft: 0 4px 18px rgba(255, 255, 255, 0.12);
+      --white-glow-strong: 0 0 28px rgba(255, 255, 255, 0.35);
       --text-main: #fcfcfc;
-      --text-muted: #888891;
-      --accent-pill: #121216;
-      --gold-accent: #f59e0b;
+      --text-muted: #8c8c96;
     }
 
     * {
@@ -46,7 +44,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Ambient Background Glow */
+    /* Ambient Lighting */
     .ambient-container {
       position: fixed;
       inset: 0;
@@ -59,10 +57,11 @@
       position: absolute;
       top: -15%;
       left: 10%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 70%);
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 70%);
       filter: blur(80px);
+      will-change: transform;
       animation: floatAura1 16s infinite ease-in-out alternate;
     }
 
@@ -70,61 +69,62 @@
       position: absolute;
       bottom: -15%;
       right: 5%;
-      width: 550px;
-      height: 550px;
+      width: 520px;
+      height: 520px;
       background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 70%);
       filter: blur(90px);
+      will-change: transform;
       animation: floatAura2 20s infinite ease-in-out alternate-reverse;
     }
 
     @keyframes floatAura1 {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(45px, -35px) scale(1.18); }
+      100% { transform: translate(45px, -35px) scale(1.15); }
     }
 
     @keyframes floatAura2 {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-40px, 30px) scale(1.12); }
+      100% { transform: translate(-40px, 30px) scale(1.1); }
     }
 
-    /* Header Navigation */
+    /* Responsive Top Bar */
     header {
       position: relative;
       z-index: 20;
-      padding: calc(14px + env(safe-area-inset-top, 0px)) 18px 14px 18px;
+      padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 12px 14px;
       background: var(--glass-panel);
-      backdrop-filter: blur(32px) saturate(190%);
-      -webkit-backdrop-filter: blur(32px) saturate(190%);
+      backdrop-filter: blur(30px) saturate(190%);
+      -webkit-backdrop-filter: blur(30px) saturate(190%);
       border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+      gap: 10px;
     }
 
     .brand-wrap {
       display: flex;
       flex-direction: column;
-      gap: 3px;
-    }
-
-    .brand-title-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 2px;
     }
 
     .brand-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.18rem;
+      font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
     }
 
     .brand-dot {
@@ -133,69 +133,29 @@
       height: 7px;
       background: #ffffff;
       border-radius: 50%;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
-      animation: pulseDot 3s infinite ease-in-out;
-    }
-
-    @keyframes pulseDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(0.85); }
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
     }
 
     .brand-slogan {
-      font-size: 0.62rem;
-      letter-spacing: 0.14em;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
       color: var(--text-muted);
       font-weight: 600;
       text-transform: uppercase;
     }
 
-    .lang-switcher-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: #eaeaea;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-medium);
-      padding: 4px 11px;
-      border-radius: 999px;
-      margin-top: 2px;
-      width: fit-content;
-      cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .lang-switcher-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: #ffffff;
-      box-shadow: var(--white-glow-soft);
-      transform: translateY(-1px);
-    }
-
-    .lang-switcher-btn svg {
-      width: 10px;
-      height: 10px;
-      fill: var(--text-muted);
-      transition: fill 0.2s;
-    }
-    .lang-switcher-btn:hover svg {
-      fill: #ffffff;
-    }
-
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .header-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
+      width: 35px;
+      height: 35px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-subtle);
@@ -226,16 +186,84 @@
       color: #000000;
       font-weight: 700;
       border: none;
-      padding: 6px 13px;
+      padding: 5px 12px;
       font-size: 0.72rem;
       border-radius: 999px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      letter-spacing: 0.02em;
+      transition: transform 0.2s;
     }
     #installAppBtn:hover {
       transform: scale(1.04);
+    }
+
+    /* Sub-Header: Mode Switcher & Language Pill */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .mode-switch-bar {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      padding: 2px;
+      gap: 3px;
+    }
+
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn.active {
+      background: #ffffff;
+      color: #000000;
       box-shadow: var(--white-glow-soft);
+    }
+
+    .lang-switcher-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #eaeaea;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-medium);
+      padding: 4px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      max-width: 50%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lang-switcher-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #ffffff;
+      box-shadow: var(--white-glow-soft);
+    }
+
+    .lang-switcher-btn svg {
+      width: 10px;
+      height: 10px;
+      fill: var(--text-muted);
+      flex-shrink: 0;
     }
 
     /* Main Chat Stream */
@@ -244,10 +272,10 @@
       z-index: 5;
       flex: 1;
       overflow-y: auto;
-      padding: 22px 18px 28px 18px;
+      padding: 18px 14px 24px 14px;
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 20px;
       scroll-behavior: smooth;
     }
 
@@ -255,19 +283,19 @@
       width: 4px;
     }
     #chat-box::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.12);
       border-radius: 4px;
     }
 
     .msg-wrapper {
       display: flex;
       flex-direction: column;
-      max-width: 88%;
-      animation: messageEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      max-width: 90%;
+      animation: messageEnter 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes messageEnter {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -279,32 +307,30 @@
     .msg-wrapper.ai {
       align-self: flex-start;
       width: 100%;
-      max-width: 94%;
+      max-width: 95%;
     }
 
-    /* User Message Bubble */
     .user .msg-bubble {
       background: linear-gradient(135deg, #ffffff 0%, #ececec 100%);
       color: #050505;
       font-weight: 500;
-      padding: 12px 18px;
-      border-radius: 20px;
+      padding: 11px 16px;
+      border-radius: 18px;
       border-bottom-right-radius: 4px;
-      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
       word-break: break-word;
-      font-size: 0.95rem;
-      line-height: 1.55;
+      font-size: 0.94rem;
+      line-height: 1.5;
     }
 
-    /* AI Message Bubble */
     .ai .msg-bubble {
       background: transparent;
       border: none;
       color: #f1f1f4;
-      padding: 2px 0 2px 16px;
+      padding: 2px 0 2px 14px;
       border-left: 2px solid rgba(255, 255, 255, 0.28);
-      font-size: 1.02rem;
-      line-height: 1.72;
+      font-size: 1rem;
+      line-height: 1.7;
       letter-spacing: 0.01em;
       word-break: break-word;
     }
@@ -321,21 +347,20 @@
       font-weight: 700;
     }
 
-    /* Modern Correction & Explanation Drawer */
+    /* Correction Drawer (Only in Tutor Mode) */
     .correction-box {
-      margin-bottom: 10px;
-      padding: 10px 14px;
+      margin-bottom: 8px;
+      padding: 9px 12px;
       background: rgba(245, 158, 11, 0.06);
-      border: 1px solid rgba(245, 158, 11, 0.22);
-      border-radius: 12px;
-      font-size: 0.88rem;
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-radius: 10px;
+      font-size: 0.86rem;
       color: #fbbf24;
       line-height: 1.45;
       display: inline-flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       max-width: 100%;
-      backdrop-filter: blur(10px);
     }
 
     .correction-header {
@@ -349,26 +374,21 @@
       background: rgba(245, 158, 11, 0.15);
       border: 1px solid rgba(245, 158, 11, 0.45);
       color: #fef3c7;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 6px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
       outline: none;
-      transition: all 0.2s ease;
-    }
-
-    .why-toggle:hover {
-      background: rgba(245, 158, 11, 0.25);
     }
 
     .why-content {
       display: none;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: #e2e8f0;
       background: rgba(0, 0, 0, 0.45);
-      padding: 8px 12px;
-      border-radius: 8px;
+      padding: 7px 10px;
+      border-radius: 6px;
       border-left: 2px solid #fbbf24;
     }
 
@@ -376,17 +396,16 @@
       display: block;
     }
 
-    /* Speak Pill */
     .speak-btn {
-      margin-top: 14px;
+      margin-top: 12px;
       align-self: flex-start;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.18);
       color: #e4e4e7;
-      padding: 6px 14px;
+      padding: 5px 13px;
       border-radius: 999px;
       font-size: 0.74rem;
       font-weight: 600;
@@ -396,8 +415,8 @@
     }
 
     .speak-btn svg {
-      width: 13px;
-      height: 13px;
+      width: 12px;
+      height: 12px;
       fill: currentColor;
     }
 
@@ -447,28 +466,27 @@
     .input-deck {
       position: relative;
       z-index: 20;
-      padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px)) 16px;
+      padding: 10px 14px calc(12px + env(safe-area-inset-bottom, 0px)) 14px;
       background: var(--glass-panel);
-      backdrop-filter: blur(32px) saturate(190%);
-      -webkit-backdrop-filter: blur(32px) saturate(190%);
+      backdrop-filter: blur(30px) saturate(190%);
+      -webkit-backdrop-filter: blur(30px) saturate(190%);
       border-top: 1px solid var(--border-subtle);
     }
 
     .input-wrapper {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       background: var(--glass-input);
       border: 1px solid var(--border-medium);
       border-radius: 999px;
-      padding: 6px 8px 6px 16px;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      padding: 5px 6px 5px 14px;
+      transition: all 0.25s ease;
     }
 
     .input-wrapper:focus-within {
       border-color: var(--border-glow);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      box-shadow: var(--white-glow-soft);
     }
 
     input#userInput {
@@ -477,9 +495,8 @@
       border: none;
       outline: none;
       color: #ffffff;
-      font-size: 0.96rem;
+      font-size: 0.94rem;
       font-family: inherit;
-      font-weight: 400;
     }
 
     input#userInput::placeholder {
@@ -487,15 +504,15 @@
     }
 
     .mic-btn, .send-btn {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.2s ease;
       outline: none;
       flex-shrink: 0;
     }
@@ -505,15 +522,10 @@
       color: #8e8e93;
     }
 
-    .mic-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.06);
-    }
-
     .mic-btn.recording {
       background: #ef4444;
       color: #ffffff;
-      box-shadow: 0 0 20px rgba(239, 68, 68, 0.7);
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.7);
       animation: pulseMic 1.2s infinite;
     }
 
@@ -528,17 +540,11 @@
       box-shadow: 0 2px 14px rgba(255, 255, 255, 0.2);
     }
 
-    .send-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.4);
-    }
-
     .send-btn:disabled {
       background: #232328;
       color: #55555d;
       cursor: not-allowed;
       box-shadow: none;
-      transform: none;
     }
 
     /* Selection Modal */
@@ -567,18 +573,12 @@
       background: var(--glass-card);
       border: 1px solid var(--border-medium);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.08);
-      padding: 26px;
-      border-radius: 28px;
+      padding: 24px;
+      border-radius: 24px;
       max-width: 440px;
       width: 100%;
       max-height: 85vh;
       overflow-y: auto;
-      transform: translateY(16px);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .modal-overlay.active .onboard-card {
-      transform: translateY(0);
     }
 
     .onboard-step {
@@ -591,30 +591,29 @@
 
     .onboard-card h3 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 700;
       margin-bottom: 6px;
       color: #ffffff;
     }
 
     .onboard-card p {
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .lang-search-box {
       width: 100%;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 11px 16px;
+      border-radius: 12px;
+      padding: 10px 14px;
       color: #ffffff;
       font-family: inherit;
       font-size: 0.88rem;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       outline: none;
-      transition: border-color 0.2s;
     }
     .lang-search-box:focus {
       border-color: var(--border-glow);
@@ -623,36 +622,29 @@
     .custom-lang-wrap {
       display: flex;
       gap: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .custom-lang-input {
       flex: 1;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 10px 14px;
+      border-radius: 12px;
+      padding: 9px 12px;
       color: #ffffff;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       outline: none;
-    }
-    .custom-lang-input:focus {
-      border-color: var(--border-glow);
     }
 
     .custom-lang-btn {
       background: #ffffff;
       color: #000000;
       border: none;
-      padding: 0 16px;
-      border-radius: 14px;
+      padding: 0 14px;
+      border-radius: 12px;
       font-weight: 700;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .custom-lang-btn:hover {
-      transform: scale(1.04);
     }
 
     .category-title {
@@ -661,26 +653,26 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin: 14px 0 8px 0;
+      margin: 12px 0 8px 0;
     }
 
     .options-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 9px;
+      gap: 8px;
     }
 
     .option-btn {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-subtle);
-      padding: 12px 10px;
-      border-radius: 14px;
+      padding: 11px 8px;
+      border-radius: 12px;
       color: #eaeaea;
       font-weight: 600;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       cursor: pointer;
       text-align: center;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -692,7 +684,6 @@
       color: #000000;
       border-color: #ffffff;
       box-shadow: var(--white-glow-soft);
-      transform: translateY(-1px);
     }
   </style>
 </head>
@@ -704,43 +695,50 @@
   </div>
 
   <header>
-    <div class="brand-wrap">
-      <div class="brand-title-row">
+    <div class="header-top">
+      <div class="brand-wrap">
         <div class="brand-title"><span class="brand-dot"></span>YOKAZ AI</div>
+        <div class="brand-slogan">JUST SPEAK WITH YOKAZ AI</div>
       </div>
-      <div class="brand-slogan">JUST SPEAK WITH YOKAZ AI</div>
       
-      <!-- Top Target Language Indicator -->
+      <div class="header-actions">
+        <button id="installAppBtn" onclick="installPWA()">Install</button>
+
+        <!-- Clear Chat Canvas (Dustbin) -->
+        <button class="header-btn" onclick="clearConversation()" title="Clear Chat">
+          <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        </button>
+
+        <!-- Delete All User Data (Human / Account Profile Icon) -->
+        <button class="header-btn" onclick="deleteAllUserData()" title="Wipe User Data & Reset">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </button>
+
+        <!-- Instagram Link -->
+        <a href="https://www.instagram.com/vynzedev" target="_blank" rel="noopener noreferrer" class="header-btn" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Sub-Controls: Segmented Mode Switcher & Language Trigger -->
+    <div class="header-controls">
+      <div class="mode-switch-bar">
+        <button class="mode-btn active" id="modeTutorBtn" onclick="switchAppMode('tutor')">🗣️ Tutor</button>
+        <button class="mode-btn" id="modeBuddyBtn" onclick="switchAppMode('buddy')">☕ Buddy</button>
+      </div>
+
       <button class="lang-switcher-btn" id="langSwitchBtn" onclick="openLanguagePicker()" title="Switch Language">
         <span id="headerLangText">🇬🇧 English • Basic</span>
         <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
       </button>
-    </div>
-    
-    <div class="header-actions">
-      <button id="installAppBtn" onclick="installPWA()">Install</button>
-
-      <!-- Clear Chat Canvas -->
-      <button class="header-btn" onclick="clearConversation()" title="Clear Chat">
-        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-      </button>
-
-      <!-- Delete All User Data -->
-      <button class="header-btn" onclick="deleteAllUserData()" title="Delete All Data & Reset">
-        <svg viewBox="0 0 24 24"><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
-      </button>
-
-      <!-- Instagram Link -->
-      <a href="https://www.instagram.com/vynzedev" target="_blank" rel="noopener noreferrer" class="header-btn" title="Instagram">
-        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-      </a>
     </div>
   </header>
 
   <main id="chat-box">
     <div class="msg-wrapper ai" id="welcomeMsg">
       <div class="msg-bubble">
-        <p>Welcome to <strong>YOKAZ AI</strong>. Tap the language selector badge above anytime to change your target language or level. Let's start!</p>
+        <p id="welcomeText">Welcome to <strong>YOKAZ AI</strong>. Switch between <strong>Tutor</strong> and <strong>Buddy</strong> modes anytime using the top bar. Let's talk!</p>
       </div>
     </div>
   </main>
@@ -748,7 +746,7 @@
   <footer class="input-deck">
     <div class="input-wrapper">
       <button class="mic-btn" id="micBtn" onclick="toggleSpeechRecognition()" title="Voice Input">
-        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+        <svg width="19" height="19" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/>
         </svg>
       </button>
@@ -761,11 +759,9 @@
     </div>
   </footer>
 
-  <!-- MULTI-STEP LANGUAGE & LEVEL PICKER -->
+  <!-- MULTI-STEP LANGUAGE PICKER -->
   <div class="modal-overlay" id="onboardModal">
     <div class="onboard-card">
-      
-      <!-- STEP 1: SEARCHABLE LANGUAGE SELECTOR -->
       <div class="onboard-step active" id="step1">
         <h3>Choose Language</h3>
         <p>Select or type any language in the world:</p>
@@ -810,7 +806,6 @@
         </div>
       </div>
 
-      <!-- STEP 2: LEVEL -->
       <div class="onboard-step" id="step2">
         <h3>Select Your Level</h3>
         <p>What is your current level?</p>
@@ -821,7 +816,6 @@
         </div>
       </div>
 
-      <!-- STEP 3: GOAL -->
       <div class="onboard-step" id="step3">
         <h3>Select Your Goal</h3>
         <p>What do you want to focus on?</p>
@@ -832,14 +826,12 @@
           <button class="option-btn" onclick="selectGoal('Daily Friendly Chat')">☕ Daily Casual Chat</button>
         </div>
       </div>
-
     </div>
   </div>
 
   <script>
     const WORKER_URL = "https://language-tutor-api.ashishkaji08.workers.dev/";
 
-    // Service Worker for PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
@@ -869,15 +861,42 @@
       'Chinese (Mandarin)': '🇨🇳', 'Turkish': '🇹🇷'
     };
 
-    let userProfile = JSON.parse(localStorage.getItem("yokaz_profile")) || null;
+    let userProfile = JSON.parse(localStorage.getItem("yokaz_profile")) || {
+      targetLanguage: "English",
+      flag: "🇬🇧",
+      level: "Beginner",
+      goal: "Spoken Fluency",
+      appMode: "tutor"
+    };
+
     let tempLang = "English", tempFlag = "🇬🇧", tempLevel = "Beginner";
     let isAdminActive = false;
 
+    function switchAppMode(mode) {
+      userProfile.appMode = mode;
+      localStorage.setItem("yokaz_profile", JSON.stringify(userProfile));
+      updateModeUI();
+    }
+
+    function updateModeUI() {
+      const isBuddy = userProfile.appMode === "buddy";
+      document.getElementById("modeTutorBtn").classList.toggle("active", !isBuddy);
+      document.getElementById("modeBuddyBtn").classList.toggle("active", isBuddy);
+      
+      const welcome = document.getElementById("welcomeText");
+      if (welcome) {
+        welcome.innerHTML = isBuddy 
+          ? "You are now in <strong>Buddy Mode</strong>. No grammar checks, no unsolicited fixes—just natural daily conversation."
+          : "You are in <strong>Tutor Mode</strong>. Active grammar corrections and language practice are turned on.";
+      }
+    }
+
     function checkOnboarding() {
-      if (!userProfile) {
+      if (!localStorage.getItem("yokaz_profile")) {
         openLanguagePicker();
       } else {
         updateProfileUI();
+        updateModeUI();
       }
     }
 
@@ -920,6 +939,7 @@
 
     function selectGoal(goal) {
       userProfile = {
+        ...userProfile,
         targetLanguage: tempLang,
         flag: tempFlag,
         level: tempLevel,
@@ -930,8 +950,8 @@
       updateProfileUI();
 
       clearConversation();
-      appendMessage(`Target language set to ${userProfile.targetLanguage} (${userProfile.level} • ${userProfile.goal})`, "user");
-      sendMessage(`Hi! I want to practice ${userProfile.targetLanguage} at a ${userProfile.level} level for ${userProfile.goal}. Please greet me in ${userProfile.targetLanguage} and start our conversation!`, true);
+      appendMessage(`Language set to ${userProfile.targetLanguage} (${userProfile.level})`, "user");
+      sendMessage(`Hi! I want to practice ${userProfile.targetLanguage}. Please greet me in ${userProfile.targetLanguage}!`, true);
     }
 
     function updateProfileUI() {
@@ -941,12 +961,11 @@
       if (badge && !isAdminActive) {
         badge.innerText = `${flag} ${userProfile.targetLanguage} • ${userProfile.level}`;
         badge.style.color = "#eaeaea";
-        badge.style.borderColor = "rgba(255, 255, 255, 0.16)";
       }
     }
 
     function deleteAllUserData() {
-      const confirmWipe = confirm("Are you sure you want to delete all saved settings, chat history, and cache?");
+      const confirmWipe = confirm("Wipe all saved profile data, settings, and local cache?");
       if (!confirmWipe) return;
 
       localStorage.clear();
@@ -964,7 +983,6 @@
 
     checkOnboarding();
 
-    // Sliding Context Memory
     let conversationHistory = [];
 
     function clearConversation() {
@@ -1044,7 +1062,6 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    // STT (Voice Input)
     let recognition = null;
     let isRecording = false;
 
@@ -1084,7 +1101,6 @@
       }
     }
 
-    // Chat Controller
     async function sendMessage(customPrompt = null, isAuto = false) {
       const input = document.getElementById("userInput");
       const sendBtn = document.getElementById("sendBtn");
@@ -1170,6 +1186,7 @@
       let explanationText = "";
       let conversationalReply = fullText;
 
+      // Extract corrections only if present (suppressed in Buddy mode)
       const corrMatch = fullText.match(/^Correction:\s*([^\n\r]+)/im);
       const explMatch = fullText.match(/^Explanation:\s*([^\n\r]+)/im);
 
@@ -1183,7 +1200,7 @@
         conversationalReply = conversationalReply.replace(explMatch[0], "").trim();
       }
 
-      if (correctionText) {
+      if (correctionText && userProfile.appMode !== "buddy") {
         const correctionDiv = document.createElement("div");
         correctionDiv.className = "correction-box";
 

@@ -270,7 +270,7 @@
       font-weight: 700;
     }
 
-    /* Topic Starter Chips */
+    /* Balanced Starter Chips */
     .starters-grid {
       display: flex;
       flex-wrap: wrap;
@@ -299,7 +299,7 @@
       transform: translateY(-1px);
     }
 
-    /* Grammar Correction & Expandable Drawer */
+    /* Grammar Correction with Expandable Drawer */
     .correction-box {
       margin-bottom: 8px;
       padding: 8px 12px;
@@ -353,7 +353,7 @@
       display: block;
     }
 
-    /* Speak Button */
+    /* Manual Click-Only Speak Button */
     .speak-btn {
       margin-top: 12px;
       align-self: flex-start;
@@ -536,7 +536,7 @@
     </div>
     
     <div class="header-actions">
-      <!-- Clear / Reset Chat Canvas -->
+      <!-- Clear Canvas Button -->
       <button class="header-btn" onclick="clearConversation()" title="Clear Chat">
         <svg viewBox="0 0 24 24">
           <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
@@ -555,14 +555,14 @@
   <main id="chat-box">
     <div class="msg-wrapper ai" id="welcomeMsg">
       <div class="msg-bubble">
-        <p>Welcome to <strong>YOKAZ AI</strong>. Talk or type to me in any language (English, Manglish, Malayalam, Hindi, Hinglish, Spanish, etc.), or pick a scenario to start practicing:</p>
+        <p>Welcome to <strong>YOKAZ AI</strong>. Talk or type to me in any language (English, Hindi, Hinglish, Spanish, Malayalam, etc.), or tap a topic to start:</p>
         
-        <!-- Quick Starter Chips -->
+        <!-- Starter Chips -->
         <div class="starters-grid">
-          <button class="starter-chip" onclick="quickSend('Practice ordering food at a restaurant')">🍔 Order Food</button>
-          <button class="starter-chip" onclick="quickSend('Help me practice an English job interview')">💼 Job Interview</button>
-          <button class="starter-chip" onclick="quickSend('German padikkanam, basic conversation thudangam')">🇩🇪 Learn German</button>
-          <button class="starter-chip" onclick="quickSend('Casual Manglish samsarikkaam, entha vishesham?')">🌴 Manglish Chat</button>
+          <button class="starter-chip" onclick="quickSend('I want to practice spoken English')">🗣️ Practice English</button>
+          <button class="starter-chip" onclick="quickSend('Mujhe English sikhna hai, help karo')">🇮🇳 Hindi / Hinglish</button>
+          <button class="starter-chip" onclick="quickSend('Practice ordering food at a cafe')">☕ Cafe Scenario</button>
+          <button class="starter-chip" onclick="quickSend('Help me prepare for a job interview')">💼 Job Interview</button>
         </div>
       </div>
     </div>
@@ -605,7 +605,7 @@
       sendMessage();
     }
 
-    // Silent Audio Unlock for Mobile Browsers
+    // Audio Unlock for Mobile Browsers
     let audioUnlocked = false;
     window.addEventListener("click", unlockAudioSilently, { once: true });
     window.addEventListener("touchstart", unlockAudioSilently, { once: true });
@@ -617,7 +617,7 @@
       audioUnlocked = true;
     }
 
-    // Dynamic Script-To-Voice Detection
+    // Script-To-Voice Detection
     function detectVoiceLang(text) {
       if (/[\u0D00-\u0D7F]/.test(text)) return 'ml-IN';
       if (/[\u0900-\u097F]/.test(text)) return 'hi-IN';
@@ -626,7 +626,7 @@
       if (/[\u0C80-\u0CFF]/.test(text)) return 'kn-IN';
       if (/[\u3040-\u30FF\u4E00-\u9FAF]/.test(text)) return 'ja-JP';
       if (/[\u0600-\u06FF]/.test(text)) return 'ar-SA';
-      return 'en-IN'; // Indian-English accent
+      return 'en-IN'; // Indian-English phonetics
     }
 
     let availableVoices = [];
@@ -747,7 +747,6 @@
       input.value = "";
       sendBtn.disabled = true;
 
-      // Add user prompt to sliding history
       conversationHistory.push({ role: "user", content: text });
 
       const aiMsgObj = appendMessage("Thinking...", "ai");
@@ -770,7 +769,6 @@
         const data = await response.json();
         const reply = data.reply || "Sorry, the server is busy.";
 
-        // Store assistant reply in sliding history
         conversationHistory.push({ role: "assistant", content: reply });
 
         renderAiMessage(aiMsgObj, reply);
@@ -853,7 +851,7 @@
         msgObj.bubble.appendChild(correctionDiv);
       }
 
-      // 2. Unboxed Open Paragraphs
+      // 2. Open Canvas Layout
       const targetText = conversationalReply || (!correctionText ? fullText : "");
       if (targetText) {
         const paragraphs = targetText.split(/\n+/).filter(p => p.trim().length > 0);
@@ -864,7 +862,7 @@
         });
       }
 
-      // 3. Floating Speak Pill (Manual click only - no auto play)
+      // 3. Floating Speak Pill (Manual trigger only)
       const speakBtn = document.createElement("button");
       speakBtn.className = "speak-btn";
       speakBtn.innerHTML = `
